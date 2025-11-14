@@ -62,6 +62,8 @@ class Cliente:
         self.calcular_factores_trapezoidales()
         self.function_heat(self.path_consumo_zona)
 
+        return self.perfil_consumo_total_anual
+
     def cargar_perfil_consumo_base(self, ruta_archivo):
         try:
             self.df_consumo_base = pd.read_excel(ruta_archivo, nrows=144)
@@ -461,6 +463,7 @@ class Cliente:
             Perfil_Mensual = pd.DataFrame(index=horas)
 
             for i, factor in enumerate(Factores_meses):
+                print(f"Mes: {nombres_meses[i]}, Factor: {factor}, Potencia: {POT_kW}")
                 columna = data_Zone_Heat[zona_cliente] * factor * POT_kW
                 Perfil_Mensual[nombres_meses[i]] = columna.values
 
