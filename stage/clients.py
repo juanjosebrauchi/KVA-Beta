@@ -4,10 +4,11 @@ import matplotlib.pyplot as plt
 
 
 class Cliente:
-    def __init__(self, indice, datos, path_consumo_base, path_consumo_extra, path_BBDD_clientes, path_consumo_zona, vector_prueba=None, cliente_actual=None):
+    def __init__(self, indice, datos, path_consumo_base, path_consumo_extra, path_BBDD_clientes, path_consumo_zona, vector_prueba=None, cliente_actual=None, logger=None):
         self.indice = indice
         self.datos = datos
         self.cliente_actual = cliente_actual
+        self.logger = logger  # Logger recibido desde el Gestor
         self.tipo_zona = datos.get('Zona', 'No aplica')
         self.path_consumo_base = path_consumo_base
         self.path_consumo_extra = path_consumo_extra
@@ -36,8 +37,15 @@ class Cliente:
         self.potencia_calefaccion = None
         self.perfil_demanda_cliente = None
 
+    def log(self, mensaje):
+        """Wrapper para loggear mensajes usando el logger centralizado"""
+        if self.logger:
+            self.logger.log(mensaje, prefijo=f"Cliente")
+        else:
+            print(f"[Cliente] {mensaje}")
+
     def ejecutar(self, ruta_perfil_base = None, ruta_perfil_extra = None, path_BBDD_clientes = None):
-        print(self.datos)
+        self.log(self.datos)
         """Método principal que ejecuta todos los cálculos del cliente"""
         ##Carga de Perfiles
         if ruta_perfil_base is None:

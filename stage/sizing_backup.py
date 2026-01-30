@@ -2,12 +2,13 @@ import os
 import pandas as pd
 
 class Dimensionamiento:
-    def __init__(self, indice, cliente_data, pdem_cliente, path_pgen, path_equipos):
+    def __init__(self, indice, cliente_data, pdem_cliente, path_pgen, path_equipos, logger=None):
         self.indice_cliente = indice
         self.cliente_data = cliente_data
         self.pdem_cliente = pdem_cliente
         self.path_pgen = path_pgen
         self.path_equipos = path_equipos
+        self.logger = logger
         # Leer hojas desde el archivo Excel de equipos
         self.eq_paneles    = pd.read_excel(self.path_equipos, sheet_name="Paneles")
         self.eq_inversores = pd.read_excel(self.path_equipos, sheet_name="Inversores")
@@ -26,9 +27,15 @@ class Dimensionamiento:
         self.seleccion_mppt_paneles = None
         self.seleccion_inversor = None
 
+    def log(self, mensaje):
+        if self.logger:
+            self.logger.log(mensaje, prefijo="Sizing")
+        else:
+            print(f"[Sizing] {mensaje}")
+
     def ejecutar(self, path_pgen=None, indice_cliente=None):
         
-        print("\n🔄 Iniciando dimensionamiento del cliente...")
+        self.log("🔄 Iniciando dimensionamiento del cliente...")
         if indice_cliente is None:
             indice_cliente = self.indice_cliente    
         if path_pgen is None:
@@ -59,18 +66,29 @@ class Dimensionamiento:
             seleccionador_inversor = SeleccionInversor(self.eq_inversores, self.dimensionamiento_final, self.seleccion_mppt)
             inversor = seleccionador_inversor.ejecutar()
             self.seleccion_inversor = inversor["Inversor"]
-            seleccion_bateria = SeleccionBateria(self.eq_baterias, self.dimensionamiento_final)
-            self.seleccion_bateria = seleccion_bateria.ejecutar()
+            seleccionador_bateria = SeleccionBateria(self.eq_baterias, self.dimensionamiento_final)
+            self.seleccionador_bateria = seleccionador_bateria.ejecutar()
 
         elif tipo_solucion == "OnGrid":
-            print("🔄 Iniciando dimensionamiento OnGrid...")
+            self.log("🔄 Iniciando dimensionamiento OnGrid...")
             # self.dimensionar_ongrid()
         elif tipo_solucion == "Hibrido":
-            print("🔄 Iniciando dimensionamiento Híbrido...")
+            self.log("🔄 Iniciando dimensionamiento Híbrido...")
             # self.dimensionar_hibrido()
         else:
-            print(f"❌ Tipo de solución no reconocido: {tipo_solucion}")
+            self.log(f"❌ Tipo de solución no reconocido: {tipo_solucion}")
         # Aquí iría el resto de la lógica de dimensionamiento
+        resultados_etapa = {
+            "dimensionamiento_final": self.dimensionamiento_final,
+            "mppt": self.seleccion_mppt,
+            "inversor": self.seleccion_inversor,
+            "bateria": getattr(self, 'seleccionador_bateria', None),
+            "potencia_panel_total": self.dimensionamiento_final.get('Potencia_PV_Total_kW', 0) if self.dimensionamiento_final else 0,
+            # Intento de extraer número de baterías si existe
+            "num_baterias": getattr(self, 'seleccionador_bateria', {}).get('Num_Baterias', 0) if hasattr(self, 'seleccionador_bateria') and isinstance(self.seleccionador_bateria, dict) else 0,
+            "costo_total_inversion": 15000  # Placeholder: Sumar costos reales aquí
+        }
+        return resultados_etapa
         # return self.resultados
 
     def cargar_archivo_pgen(self, base_path=None):
