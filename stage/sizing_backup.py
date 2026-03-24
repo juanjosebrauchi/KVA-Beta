@@ -2,13 +2,14 @@ import os
 import pandas as pd
 
 class Dimensionamiento:
-    def __init__(self, indice, cliente_data, pdem_cliente, path_pgen, path_equipos, logger=None):
+    def __init__(self, indice, cliente_data, pdem_cliente, path_pgen, path_equipos, logger=None, interactive_mode=False):
         self.indice_cliente = indice
         self.cliente_data = cliente_data
         self.pdem_cliente = pdem_cliente
         self.path_pgen = path_pgen
         self.path_equipos = path_equipos
         self.logger = logger
+        self.interactive_mode = interactive_mode
         # Leer hojas desde el archivo Excel de equipos
         self.eq_paneles    = pd.read_excel(self.path_equipos, sheet_name="Paneles")
         self.eq_inversores = pd.read_excel(self.path_equipos, sheet_name="Inversores")
@@ -206,32 +207,36 @@ class Dimensionamiento:
             
             potencias = resultado["Potencias"]
             meses = resultado["Meses"]
-            print('Test2')
             pot_min = min(potencias)
             mes_min = meses[potencias.index(pot_min)]
             pot_max = max(potencias)
             mes_max = meses[potencias.index(pot_max)]
-            print('Test3')
             print(f"   ➤ Potencia mínima: {pot_min:.2f} kW en {mes_min}")
             print(f"   ➤ Potencia máxima: {pot_max:.2f} kW en {mes_max}")
 
-            # Preguntar si desea cambiar el paso
-            respuesta = input("\n¿Deseas modificar el paso? (Y/N): ").strip().lower()
-            if respuesta != 'y':
+            # Preguntar si desea cambiar el paso (solo si interactive_mode está activo)
+            if self.interactive_mode:
+                print("Paso por defecto es 0.4 kW. Puedes modificarlo para ver cómo afecta el dimensionamiento.")
+                respuesta = input("\n¿Deseas modificar el paso? (Y/N): ").strip().lower()
+                if respuesta != 'y':
+                    print("✅ Continuando con el proceso usando el paso actual.")
+                    break
+
+                # Ingresar nuevo valor personalizado
+                while True:
+                    try:
+                        nuevo_paso = float(input("🔧 Ingresa nuevo valor de paso (en kW): "))
+                        if nuevo_paso > 0:
+                            paso_actual = nuevo_paso
+                            break
+                        else:
+                            print("⚠️ El paso debe ser mayor que 0.")
+                    except ValueError:
+                        print("⚠️ Entrada inválida. Ingresa un número válido.")
+            else:
+                # Modo no interactivo: usar valor por defecto y continuar
                 print("✅ Continuando con el proceso usando el paso actual.")
                 break
-
-            # Ingresar nuevo valor personalizado
-            while True:
-                try:
-                    nuevo_paso = float(input("🔧 Ingresa nuevo valor de paso (en kW): "))
-                    if nuevo_paso > 0:
-                        paso_actual = nuevo_paso
-                        break
-                    else:
-                        print("⚠️ El paso debe ser mayor que 0.")
-                except ValueError:
-                    print("⚠️ Entrada inválida. Ingresa un número válido.")
 
     def calc_sensibilidad(self, paso, pot_max=None):
         """
@@ -286,70 +291,106 @@ class Dimensionamiento:
         paso = 0.5  # Paso por defecto
         resultado = self.calc_sensibilidad(paso)
 
-        while True:
-            respuesta = input("\n❓ ¿Deseas modificar el valor del paso? (Y/N): ").strip().lower()
-            if respuesta == 'y':
-                try:
-                    paso = float(input("📥 Ingresa el nuevo valor de paso (ej. 0.2, 0.6): "))
-                    resultado = self.calc_sensibilidad(paso)
-                except ValueError:
-                    print("⚠️ Valor inválido. Asegúrate de ingresar un número decimal.")
-            elif respuesta == 'n':
-                print("✅ Continuando con el proceso final del análisis...")
-                break
-            else:
-                print("⚠️ Respuesta no válida. Ingresa 'Y' para sí o 'N' para no.")
+        # Solo solicitar modificación si interactive_mode está activo
+        if self.interactive_mode:
+            while True:
+                respuesta = input("\n❓ ¿Deseas modificar el valor del paso? (Y/N): ").strip().lower()
+                if respuesta == 'y':
+                    try:
+                        paso = float(input("📥 Ingresa el nuevo valor de paso (ej. 0.2, 0.6): "))
+                        resultado = self.calc_sensibilidad(paso)
+                    except ValueError:
+                        print("⚠️ Valor inválido. Asegúrate de ingresar un número decimal.")
+                elif respuesta == 'n':
+                    print("✅ Continuando con el proceso final del análisis...")
+                    break
+                else:
+                    print("⚠️ Respuesta no válida. Ingresa 'Y' para sí o 'N' para no.")
+        else:
+            # Modo no interactivo: usar valor por defecto
+            print("✅ Continuando con el proceso final del análisis...")
         
         return resultado
     
     def calc_meses_criticos_interactivo(self, rango, ediff, meses):
         print("\n🔍 Analizando meses críticos...")
 
-        while True:
-            diff_pp = 10.0  # valor por defecto
-            print(f"\n⚙️ Calculando meses críticos con sensibilidad del {diff_pp:.1f}%...")
-            mc_trigg = rango * (diff_pp / 100)
-            mc_ix = []
-            mc_value = []
+        diff_pp = 10.0  # valor por defecto
+        print(f"\n⚙️ Calculando meses críticos con sensibilidad del {diff_pp:.1f}%...")
+        mc_trigg = rango * (diff_pp / 100)
+        mc_ix = []
+        mc_value = []
 
-            for idx, val in enumerate(ediff.loc[:, 2]):
-                if mc_trigg > val:
-                    mc_ix.append(idx)
-                    mc_value.append(val)
+        for idx, val in enumerate(ediff.loc[:, 2]):
+            if mc_trigg > val:
+                mc_ix.append(idx)
+                mc_value.append(val)
 
-            # Mostrar resultados
-            if not mc_ix:
-                print("✅ No se detectaron meses críticos bajo el umbral especificado.")
-            else:
-                print("\n📌 Los Meses Críticos son:")
-                for i, idx in enumerate(mc_ix):
-                    print(f"{i+1}. {meses[idx]} con energía residual de {mc_value[i]:.2f} [kWh]")
+        # Mostrar resultados
+        if not mc_ix:
+            print("✅ No se detectaron meses críticos bajo el umbral especificado.")
+        else:
+            print("\n📌 Los Meses Críticos son:")
+            for i, idx in enumerate(mc_ix):
+                print(f"{i+1}. {meses[idx]} con energía residual de {mc_value[i]:.2f} [kWh]")
 
-            # Guardar en atributo
-            self.meses_criticos = {
-                "indices": mc_ix,
-                "valores": mc_value,
-                "meses": [meses[i] for i in mc_ix],
-                "umbral_kWh": mc_trigg,
-                "porcentaje": diff_pp
-            }
+        # Guardar en atributo
+        self.meses_criticos = {
+            "indices": mc_ix,
+            "valores": mc_value,
+            "meses": [meses[i] for i in mc_ix],
+            "umbral_kWh": mc_trigg,
+            "porcentaje": diff_pp
+        }
 
-            # Preguntar si se quiere probar otro umbral
-            respuesta = input("\n¿Deseas probar con otro porcentaje de sensibilidad? (Y/N): ").strip().lower()
-            if respuesta == 'y':
-                while True:
-                    try:
-                        diff_pp = float(input("Ingrese nuevo porcentaje de sensibilidad (ej: 15 para 15%): "))
-                        if diff_pp <= 0 or diff_pp >= 100:
-                            print("⚠️ Debe ingresar un valor entre 1 y 99.")
-                            continue
-                        break
-                    except ValueError:
-                        print("⚠️ Por favor, ingrese un número válido.")
-                continue  # vuelve al cálculo con nuevo valor
-            else:
-                print("✅ Análisis de meses críticos finalizado.")
-                break
+        # Solo solicitar modificación si interactive_mode está activo
+        if self.interactive_mode:
+            while True:
+                respuesta = input("\n¿Deseas probar con otro porcentaje de sensibilidad? (Y/N): ").strip().lower()
+                if respuesta == 'y':
+                    while True:
+                        try:
+                            diff_pp = float(input("Ingrese nuevo porcentaje de sensibilidad (ej: 15 para 15%): "))
+                            if diff_pp <= 0 or diff_pp >= 100:
+                                print("⚠️ Debe ingresar un valor entre 1 y 99.")
+                                continue
+                            break
+                        except ValueError:
+                            print("⚠️ Por favor, ingrese un número válido.")
+                    
+                    # Recalcular con el nuevo valor
+                    print(f"\n⚙️ Calculando meses críticos con sensibilidad del {diff_pp:.1f}%...")
+                    mc_trigg = rango * (diff_pp / 100)
+                    mc_ix = []
+                    mc_value = []
+
+                    for idx, val in enumerate(ediff.loc[:, 2]):
+                        if mc_trigg > val:
+                            mc_ix.append(idx)
+                            mc_value.append(val)
+
+                    # Mostrar resultados
+                    if not mc_ix:
+                        print("✅ No se detectaron meses críticos bajo el umbral especificado.")
+                    else:
+                        print("\n📌 Los Meses Críticos son:")
+                        for i, idx in enumerate(mc_ix):
+                            print(f"{i+1}. {meses[idx]} con energía residual de {mc_value[i]:.2f} [kWh]")
+
+                    # Actualizar en atributo
+                    self.meses_criticos = {
+                        "indices": mc_ix,
+                        "valores": mc_value,
+                        "meses": [meses[i] for i in mc_ix],
+                        "umbral_kWh": mc_trigg,
+                        "porcentaje": diff_pp
+                    }
+                else:
+                    print("✅ Análisis de meses críticos finalizado.")
+                    break
+        else:
+            # Modo no interactivo: usar valor por defecto
+            print("✅ Análisis de meses críticos finalizado.")
 
         return mc_ix
     

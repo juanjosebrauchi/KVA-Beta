@@ -58,7 +58,7 @@ class GestorProyecto:
             pdem_cliente = cliente.ejecutar()
             self.resultados['pdem_cliente'] = pdem_cliente
             self.log("✅ Perfiles de cliente generados.")
-            
+            11
             # 3. Dimensionamiento Técnico: Selección de Equipos (Sizing)
             self.log("▶ Paso 3: Dimensionamiento Técnico (Generación y Equipos)")
             sizing = Dimensionamiento(
@@ -67,7 +67,8 @@ class GestorProyecto:
                 pdem_cliente, 
                 self.config.path_pgen_clientes, 
                 path_equipos=self.config.path_equipos,
-                logger=self.logger # Logger
+                logger=self.logger, # Logger
+                interactive_mode=False  # Flag para controlar inputs (True=solicitar, False=usar defaults)
             )
             sizing = sizing.ejecutar()
             self.resultados['sizing'] = sizing
@@ -75,15 +76,14 @@ class GestorProyecto:
             
             # 4. Optimización y Evaluación Financiera
             self.log("▶ Paso 4: Optimización Económica y Flujo de Caja")
-            # optimizador = Optimizador(
-            #     indice, 
-            #     cliente_data, 
-            #     pdem_cliente, 
-            #     sizing, 
-            #     logger=self.logger)
-            
-            # # Pasamos 'self' como gestor para permitir logging centralizado desde la clase hija
-            # optimizador.ejecutar(gestor=self) 
+            optimizador = Optimizador(
+                indice, 
+                cliente_data, 
+                pdem_cliente, 
+                sizing, 
+                self.config.path_pgen_clientes,
+                logger=self.logger)
+            optimizador.ejecutar()
             
             elapsed = time.time() - start_time
             print("\n" + "="*50)
