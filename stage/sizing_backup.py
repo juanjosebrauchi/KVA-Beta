@@ -2,10 +2,11 @@ import os
 import pandas as pd
 
 class Dimensionamiento:
-    def __init__(self, indice, cliente_data, pdem_cliente, path_pgen, path_equipos, logger=None):
+    def __init__(self, indice, cliente_data, pdem_cliente, Dem_Max, path_pgen, path_equipos, logger=None):
         self.indice_cliente = indice
         self.cliente_data = cliente_data
         self.pdem_cliente = pdem_cliente
+        self.Dem_Max = Dem_Max   #Cambio 17-02-26
         self.path_pgen = path_pgen
         self.path_equipos = path_equipos
         self.logger = logger
@@ -304,9 +305,9 @@ class Dimensionamiento:
     
     def calc_meses_criticos_interactivo(self, rango, ediff, meses):
         print("\n🔍 Analizando meses críticos...")
-
+        diff_pp = 10.0  # valor por defecto
+        
         while True:
-            diff_pp = 10.0  # valor por defecto
             print(f"\n⚙️ Calculando meses críticos con sensibilidad del {diff_pp:.1f}%...")
             mc_trigg = rango * (diff_pp / 100)
             mc_ix = []
@@ -357,7 +358,8 @@ class Dimensionamiento:
         print("\n🔧 Paso 3: Dimensionamiento final OffGrid")
 
         # Potencia del Inversor
-        dim_p_inv = max(self.pdem_cliente.max().to_list())
+        dim_p_inv = self.Dem_Max*6  # Cambio 17-02-26: Usar Dem_Max en lugar de Dem_Max_10min
+
         print(f"⚡ Potencia máxima demandada: {dim_p_inv:.2f} [kW]")
 
         # Potencia FV máxima
@@ -851,9 +853,11 @@ class SeleccionInversor:
         y voltaje de batería, basándose en Eq_Inversores y DatosMPPT.
         """
         Eq_Inversores = self.eq_inversores
-        Dim_P_Inv = self.dimensionamiento_final["Potencia_Inversor"]
-
+        Factor_Seguridad_Inv = 1.15
+        Dim_P_Inv = self.dimensionamiento_final["Potencia_Inversor"]*Factor_Seguridad_Inv
+        print("---------AQUI-------L: 858, Sizing\n")
         print("Potencia Mínima del Inversor {:.2f} [kW]".format(Dim_P_Inv))
+        print("Con un Factor de Seguridad de: {:.2f} %".format((Factor_Seguridad_Inv-1)*100))
 
         len_inv = len(Eq_Inversores)
         Inv_EN = [0] * len_inv

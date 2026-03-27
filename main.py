@@ -55,7 +55,7 @@ class GestorProyecto:
                 cliente_actual=prepro.cliente_actual,
                 logger=self.logger # Inyección del logger
             )
-            pdem_cliente = cliente.ejecutar()
+            pdem_cliente,Dem_Max = cliente.ejecutar()
             self.resultados['pdem_cliente'] = pdem_cliente
             self.log("✅ Perfiles de cliente generados.")
             
@@ -65,6 +65,7 @@ class GestorProyecto:
                 indice, 
                 cliente_data, 
                 pdem_cliente, 
+                Dem_Max,
                 self.config.path_pgen_clientes, 
                 path_equipos=self.config.path_equipos,
                 logger=self.logger # Logger

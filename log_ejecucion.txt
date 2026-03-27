@@ -1,0 +1,30 @@
+--- Inicio de Ejecución: 2026-03-24 22:17:32 ---
+[22:17:32] [Gestor] 🚀 Iniciando pipeline de simulación
+[22:17:32] [Gestor] ▶ Paso 1: Preprocesamiento de Encuesta
+[22:17:35] [Gestor] ✅ Preprocesamiento finalizado.
+[22:17:35] [Gestor] ▶ Paso 2: Análisis de Cliente y Demanda
+[22:17:35] [Cliente] Marca temporal                                                                                              2025-05-11 14:22:05
+Nombre                                                                                                            Cliente Test1
+Correo electrónico:                                                                                       cliente.test1@kva.com
+Direccion                                                                                                              Santiago
+Tipo de solución                                                                                                        OffGrid
+Tamaño casa                                                                                                                 110
+N° habitaciones                                                                                                               3
+N° baños                                                                                                                      2
+Número de personas que viven en la casa:                                                                        Cuatro personas
+Descripción de los miembros de la familia (Ejemplo: 2 adultos y un niño):                                                 Nadie
+Teletrabajo                                                                                                                  Si
+Calefacción                                                                                                                  Si
+N° habitaciones con calefaccion                                                                                             2.0
+Desea calefacción                                                                                                            No
+N° habitaciones que quiere calefaccionar                                                                                    NaN
+Electrodomésticos Extra                                                       Secadora de Ropa, Horno Eléctrico, Máquina de ...
+Zona                                                                                                              Metropolitana
+Tipo Zona                                                                                                                    Z1
+Name: 10, dtype: object
+[22:17:35] [Gestor] ✅ Perfiles de cliente generados.
+[22:17:35] [Gestor] ▶ Paso 3: Dimensionamiento Técnico (Generación y Equipos)
+[22:17:35] [Sizing] 🔄 Iniciando dimensionamiento del cliente...
+[22:17:38] [Gestor] ✅ Dimensionamiento técnico completado.
+[22:17:38] [Gestor] ▶ Paso 4: Optimización Económica y Flujo de Caja
+[22:17:38] [Gestor] 🏁 Ejecución completada exitosamente en 6.27 segundos.

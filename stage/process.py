@@ -172,7 +172,7 @@ class Preprocess:
         Zona_1 = ['Valparaíso', 'Metropolitana', "O'Higgins"]
         Zona_2 = ['Maule', 'Ñuble', 'BioBío']
         Zona_3 = ['La Araucanía', 'Los Ríos', 'Los Lagos']
-        Zona_4 = ['Aysén']
+        Zona_4 = ['Aysén', 'Magallanes']
 
         region_cliente = self.cliente_actual.get('Zona', "")
 
@@ -185,7 +185,7 @@ class Preprocess:
         elif region_cliente in Zona_4:
             self.tipo_zona = 'Z4'
         else:
-            self.tipo_zona = 'No aplica'
+            self.tipo_zona = 'Z5'  # Zona por defecto para regiones no listadas
 
         # print(f"Zona de calefacción calculada: {self.tipo_zona}")
         self.log(f"Zona de calefacción calculada: {self.tipo_zona}")

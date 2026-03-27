@@ -36,6 +36,7 @@ class Cliente:
         self.costo_calefaccion = None
         self.potencia_calefaccion = None
         self.perfil_demanda_cliente = None
+        self.Dem_Max = None           #Cambio 17-02-26
 
     def log(self, mensaje):
         """Wrapper para loggear mensajes usando el logger centralizado"""
@@ -70,7 +71,7 @@ class Cliente:
         self.calcular_factores_trapezoidales()
         self.function_heat(self.path_consumo_zona)
 
-        return self.perfil_consumo_total_anual
+        return self.perfil_consumo_total_anual, self.Dem_Max      #Cambio 17-02-26
 
     def cargar_perfil_consumo_base(self, ruta_archivo):
         try:
@@ -248,7 +249,10 @@ class Cliente:
             # Unir por Hour y Minute
             df_combined = pd.merge(df_base, df_extra, on=['Hour', 'Minute'], how='outer', suffixes=('_Base', '_Extra'))
             print("\n📊 Combinando consumos base y extra:")
-            print(df_combined)
+            print(df_combined) #Cambio 03.02
+            print("\n📊 Combinando consumos base y extra:")
+            print("Perfil Combinado: ",df_combined)
+    
 
             # Calcular el consumo total combinado
             df_combined['Consumo_Total'] = df_combined['Consumo_Total'].fillna(0) + df_combined['TotalConsumo'].fillna(0)
@@ -299,7 +303,10 @@ class Cliente:
             # Calcular el factor mensual
             factor_mes = [round(val / max_dem,5) for val in client_values]
             print()
-            print("Factor mensual:", factor_mes)
+            print("-------AQUI--------L:306 Clients\n")
+            print("Factores mes\n")
+            for n in range(12):
+                print(f"{n+1}: {factor_mes[n]}")
 
             # Guardar el DataFrame con factores mensuales
             self.factor_mes_cliente = pd.DataFrame(factor_mes, columns=["Factor"])
@@ -340,7 +347,8 @@ class Cliente:
             if len(perfil_10min) != 144:
                 print(f"⚠️ Perfil esperado con 144 registros (24h * 6), pero tiene: {len(perfil_10min)}.")
                 return
-
+            
+            #Conversion Perfil 10 min a 1Hr
             consumo_1h = []
             energia_acumulada = 0
             contador = 0
@@ -361,6 +369,10 @@ class Cliente:
             print(f"\n🔍 Consumo total original (10min): {sum(perfil_10min):.2f} kWh")
             print(f"🔍 Consumo total resumido (1h): {sum(consumo_1h):.2f} kWh")
 
+            print("-------AQUI-------L: 372, Clients\n")
+            self.Dem_Max = max(consumo_1h)  # Guardar la demanda máxima del perfil horario para uso posterior
+            print("Demanda máxima del perfil horario (1h): {:.2f} kWh".format(self.Dem_Max))
+            print("------------------------------")
         except Exception as e:
             print(f"❌ Error en agrupar_perfil_horario: {e}")
 
@@ -400,7 +412,8 @@ class Cliente:
             'Z1': {'inicio': 6, 'fin': 8},
             'Z2': {'inicio': 5, 'fin': 9},
             'Z3': {'inicio': 4, 'fin': 10},
-            'Z4': {'inicio': 4, 'fin': 11}
+            'Z4': {'inicio': 4, 'fin': 11},
+            'Z5': {'inicio': 1, 'fin': 12}
         }
 
         zona = self.datos.get('Tipo Zona')
@@ -419,18 +432,26 @@ class Cliente:
         """Calcula los factores mensuales de calefacción con forma trapezoidal basados en la zona del cliente."""
         mes_inicio = self.inicio_invierno
         mes_fin = self.fin_invierno
-
+        zona = self.datos.get('Tipo Zona')
         factores = [0.0] * 12
+        print("-------AQUI-------L: 437, Clients\n")
+        print("Zona del cliente: ", zona)
+        if zona != 'Z5':
+            for i in range(mes_inicio - 1):
+                factores[i] = round((i + 1) / mes_inicio, 3)
 
-        for i in range(mes_inicio - 1):
-            factores[i] = round((i + 1) / mes_inicio, 3)
+            for i in range(mes_inicio - 1, mes_fin):
+                factores[i] = 1.0
 
-        for i in range(mes_inicio - 1, mes_fin):
-            factores[i] = 1.0
+            duracion_bajada = 12 - mes_fin
+            for i in range(mes_fin, 12):
+                factores[i] = round(1 - ((i - mes_fin + 1) / (duracion_bajada + 1)), 3)
+        else:
+            factores = [0.1] * 12            
 
-        duracion_bajada = 12 - mes_fin
-        for i in range(mes_fin, 12):
-            factores[i] = round(1 - ((i - mes_fin + 1) / (duracion_bajada + 1)), 3)
+        print("-------AQUI-------L: 452, Clients\n")
+        print("Factores trapezoidales calculados para calefacción:\n")
+        print(factores)
 
         self.factores_trapezoidales = factores
         print("\n📊 Factores trapezoidales de calefacción:")
@@ -469,7 +490,9 @@ class Cliente:
             horas = data_Zone_Heat['T'].tolist()
 
             Perfil_Mensual = pd.DataFrame(index=horas)
-
+            print("-------AQUI-------L: 493, Clients\n")
+            print("Zona del cliente: \n", zona_cliente)
+            print("Perfil Calefacción base por zona (kW): \n", data_Zone_Heat[zona_cliente])
             for i, factor in enumerate(Factores_meses):
                 print(f"Mes: {nombres_meses[i]}, Factor: {factor}, Potencia: {POT_kW}")
                 columna = data_Zone_Heat[zona_cliente] * factor * POT_kW
