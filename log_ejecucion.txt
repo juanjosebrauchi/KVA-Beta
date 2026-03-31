@@ -1,9 +1,18 @@
+<<<<<<< HEAD
 --- Inicio de Ejecución: 2026-03-24 22:17:32 ---
 [22:17:32] [Gestor] 🚀 Iniciando pipeline de simulación
 [22:17:32] [Gestor] ▶ Paso 1: Preprocesamiento de Encuesta
 [22:17:35] [Gestor] ✅ Preprocesamiento finalizado.
 [22:17:35] [Gestor] ▶ Paso 2: Análisis de Cliente y Demanda
 [22:17:35] [Cliente] Marca temporal                                                                                              2025-05-11 14:22:05
+=======
+--- Inicio de Ejecución: 2026-02-02 17:47:13 ---
+[17:47:13] [Gestor] 🚀 Iniciando pipeline de simulación
+[17:47:13] [Gestor] ▶ Paso 1: Preprocesamiento de Encuesta
+[17:47:36] [Gestor] ✅ Preprocesamiento finalizado.
+[17:47:36] [Gestor] ▶ Paso 2: Análisis de Cliente y Demanda
+[17:47:36] [Cliente] Marca temporal                                                                                              2025-05-11 14:22:05
+>>>>>>> ae8df5316f33e5f17528b928f8832b08554c36e6
 Nombre                                                                                                            Cliente Test1
 Correo electrónico:                                                                                       cliente.test1@kva.com
 Direccion                                                                                                              Santiago
@@ -22,9 +31,18 @@ Electrodomésticos Extra                                                       S
 Zona                                                                                                              Metropolitana
 Tipo Zona                                                                                                                    Z1
 Name: 10, dtype: object
+<<<<<<< HEAD
 [22:17:35] [Gestor] ✅ Perfiles de cliente generados.
 [22:17:35] [Gestor] ▶ Paso 3: Dimensionamiento Técnico (Generación y Equipos)
 [22:17:35] [Sizing] 🔄 Iniciando dimensionamiento del cliente...
 [22:17:38] [Gestor] ✅ Dimensionamiento técnico completado.
 [22:17:38] [Gestor] ▶ Paso 4: Optimización Económica y Flujo de Caja
 [22:17:38] [Gestor] 🏁 Ejecución completada exitosamente en 6.27 segundos.
+=======
+[17:47:36] [Gestor] ✅ Perfiles de cliente generados.
+[17:47:36] [Gestor] ▶ Paso 3: Dimensionamiento Técnico (Generación y Equipos)
+[17:47:36] [Sizing] 🔄 Iniciando dimensionamiento del cliente...
+[17:47:41] [Gestor] ✅ Dimensionamiento técnico completado.
+[17:47:41] [Gestor] ▶ Paso 4: Optimización Económica y Flujo de Caja
+[17:47:41] [Gestor] 🏁 Ejecución completada exitosamente en 28.41 segundos.
+>>>>>>> ae8df5316f33e5f17528b928f8832b08554c36e6
