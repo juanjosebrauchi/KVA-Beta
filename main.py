@@ -58,7 +58,7 @@ class GestorProyecto:
             pdem_cliente,Dem_Max = cliente.ejecutar()
             self.resultados['pdem_cliente'] = pdem_cliente
             self.log("✅ Perfiles de cliente generados.")
-            11
+
             # 3. Dimensionamiento Técnico: Selección de Equipos (Sizing)
             self.log("▶ Paso 3: Dimensionamiento Técnico (Generación y Equipos)")
             sizing = Dimensionamiento(

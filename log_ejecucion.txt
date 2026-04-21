@@ -1,18 +1,9 @@
-<<<<<<< HEAD
---- Inicio de Ejecución: 2026-03-24 22:17:32 ---
-[22:17:32] [Gestor] 🚀 Iniciando pipeline de simulación
-[22:17:32] [Gestor] ▶ Paso 1: Preprocesamiento de Encuesta
-[22:17:35] [Gestor] ✅ Preprocesamiento finalizado.
-[22:17:35] [Gestor] ▶ Paso 2: Análisis de Cliente y Demanda
-[22:17:35] [Cliente] Marca temporal                                                                                              2025-05-11 14:22:05
-=======
---- Inicio de Ejecución: 2026-02-02 17:47:13 ---
-[17:47:13] [Gestor] 🚀 Iniciando pipeline de simulación
-[17:47:13] [Gestor] ▶ Paso 1: Preprocesamiento de Encuesta
-[17:47:36] [Gestor] ✅ Preprocesamiento finalizado.
-[17:47:36] [Gestor] ▶ Paso 2: Análisis de Cliente y Demanda
-[17:47:36] [Cliente] Marca temporal                                                                                              2025-05-11 14:22:05
->>>>>>> ae8df5316f33e5f17528b928f8832b08554c36e6
+--- Inicio de Ejecución: 2026-04-21 16:04:46 ---
+[16:04:46] [Gestor] 🚀 Iniciando pipeline de simulación
+[16:04:46] [Gestor] ▶ Paso 1: Preprocesamiento de Encuesta
+[16:04:52] [Gestor] ✅ Preprocesamiento finalizado.
+[16:04:52] [Gestor] ▶ Paso 2: Análisis de Cliente y Demanda
+[16:04:52] [Cliente] Marca temporal                                                                                              2025-05-11 14:22:05
 Nombre                                                                                                            Cliente Test1
 Correo electrónico:                                                                                       cliente.test1@kva.com
 Direccion                                                                                                              Santiago
@@ -31,18 +22,19 @@ Electrodomésticos Extra                                                       S
 Zona                                                                                                              Metropolitana
 Tipo Zona                                                                                                                    Z1
 Name: 10, dtype: object
-<<<<<<< HEAD
-[22:17:35] [Gestor] ✅ Perfiles de cliente generados.
-[22:17:35] [Gestor] ▶ Paso 3: Dimensionamiento Técnico (Generación y Equipos)
-[22:17:35] [Sizing] 🔄 Iniciando dimensionamiento del cliente...
-[22:17:38] [Gestor] ✅ Dimensionamiento técnico completado.
-[22:17:38] [Gestor] ▶ Paso 4: Optimización Económica y Flujo de Caja
-[22:17:38] [Gestor] 🏁 Ejecución completada exitosamente en 6.27 segundos.
-=======
-[17:47:36] [Gestor] ✅ Perfiles de cliente generados.
-[17:47:36] [Gestor] ▶ Paso 3: Dimensionamiento Técnico (Generación y Equipos)
-[17:47:36] [Sizing] 🔄 Iniciando dimensionamiento del cliente...
-[17:47:41] [Gestor] ✅ Dimensionamiento técnico completado.
-[17:47:41] [Gestor] ▶ Paso 4: Optimización Económica y Flujo de Caja
-[17:47:41] [Gestor] 🏁 Ejecución completada exitosamente en 28.41 segundos.
->>>>>>> ae8df5316f33e5f17528b928f8832b08554c36e6
+[16:04:53] [Gestor] ✅ Perfiles de cliente generados.
+[16:04:53] [Gestor] ▶ Paso 3: Dimensionamiento Técnico (Generación y Equipos)
+[16:04:53] [Sizing] 🔄 Iniciando dimensionamiento del cliente...
+[16:04:54] [Gestor] ✅ Dimensionamiento técnico completado.
+[16:04:54] [Gestor] ▶ Paso 4: Optimización Económica y Flujo de Caja
+[16:04:54] [Optimizador] 🚀 Iniciando proceso para cliente 10...
+[16:04:54] [Optimizador] 📖 [1/4] Leyendo parámetros de entrada...
+[16:04:54] [Optimizador] 🔄 PDEM estandarizado: Transpuesto de (24, 12) a (12, 24) (Meses x Horas)
+[16:04:54] [Optimizador] 📂 Cargando perfil de generación: PGEN_11_CTest1.xlsx
+[16:04:54] [Optimizador] ✅ PGEN estandarizado y cargado. Forma: (12, 24) (Meses x Horas)
+[16:04:54] [Optimizador] ⚙️ [2/4] Resolviendo optimización matemática...
+[16:04:54] [Optimizador] 📅 Modo: Optimización anual (288 periodos = 12 meses × 24 horas)
+[16:04:54] [Optimizador] 📊 Total demanda anual: 84.08 kWh
+[16:04:54] [Optimizador] 📊 Total generación anual: 0.00 kWh
+[16:04:54] [Optimizador] ✅ Proceso finalizado.
+[16:04:54] [Gestor] 🏁 Ejecución completada exitosamente en 8.32 segundos.

@@ -2,11 +2,7 @@ import os
 import pandas as pd
 
 class Dimensionamiento:
-<<<<<<< HEAD
-    def __init__(self, indice, cliente_data, pdem_cliente, Dem_Max, path_pgen, path_equipos, logger=None):
-=======
-    def __init__(self, indice, cliente_data, pdem_cliente, path_pgen, path_equipos, logger=None, interactive_mode=False):
->>>>>>> ae8df5316f33e5f17528b928f8832b08554c36e6
+    def __init__(self, indice, cliente_data, pdem_cliente, Dem_Max, path_pgen, path_equipos, logger=None, interactive_mode=False):
         self.indice_cliente = indice
         self.cliente_data = cliente_data
         self.pdem_cliente = pdem_cliente
@@ -319,23 +315,13 @@ class Dimensionamiento:
     
     def calc_meses_criticos_interactivo(self, rango, ediff, meses):
         print("\n🔍 Analizando meses críticos...")
-<<<<<<< HEAD
-        diff_pp = 10.0  # valor por defecto
-        
-        while True:
-            print(f"\n⚙️ Calculando meses críticos con sensibilidad del {diff_pp:.1f}%...")
-            mc_trigg = rango * (diff_pp / 100)
-            mc_ix = []
-            mc_value = []
-=======
 
         diff_pp = 10.0  # valor por defecto
         print(f"\n⚙️ Calculando meses críticos con sensibilidad del {diff_pp:.1f}%...")
         mc_trigg = rango * (diff_pp / 100)
         mc_ix = []
         mc_value = []
->>>>>>> ae8df5316f33e5f17528b928f8832b08554c36e6
-
+                                                                                                                                                         
         for idx, val in enumerate(ediff.loc[:, 2]):
             if mc_trigg > val:
                 mc_ix.append(idx)
