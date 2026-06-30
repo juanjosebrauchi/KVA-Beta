@@ -1,40 +1,40 @@
---- Inicio de Ejecución: 2026-04-21 16:04:46 ---
-[16:04:46] [Gestor] 🚀 Iniciando pipeline de simulación
-[16:04:46] [Gestor] ▶ Paso 1: Preprocesamiento de Encuesta
-[16:04:52] [Gestor] ✅ Preprocesamiento finalizado.
-[16:04:52] [Gestor] ▶ Paso 2: Análisis de Cliente y Demanda
-[16:04:52] [Cliente] Marca temporal                                                                                              2025-05-11 14:22:05
-Nombre                                                                                                            Cliente Test1
-Correo electrónico:                                                                                       cliente.test1@kva.com
-Direccion                                                                                                              Santiago
-Tipo de solución                                                                                                        OffGrid
-Tamaño casa                                                                                                                 110
-N° habitaciones                                                                                                               3
-N° baños                                                                                                                      2
-Número de personas que viven en la casa:                                                                        Cuatro personas
-Descripción de los miembros de la familia (Ejemplo: 2 adultos y un niño):                                                 Nadie
-Teletrabajo                                                                                                                  Si
-Calefacción                                                                                                                  Si
-N° habitaciones con calefaccion                                                                                             2.0
-Desea calefacción                                                                                                            No
-N° habitaciones que quiere calefaccionar                                                                                    NaN
-Electrodomésticos Extra                                                       Secadora de Ropa, Horno Eléctrico, Máquina de ...
-Zona                                                                                                              Metropolitana
-Tipo Zona                                                                                                                    Z1
-Name: 10, dtype: object
-[16:04:53] [Gestor] ✅ Perfiles de cliente generados.
-[16:04:53] [Gestor] ▶ Paso 3: Dimensionamiento Técnico (Generación y Equipos)
-[16:04:53] [Sizing] 🔄 Iniciando dimensionamiento del cliente...
-[16:04:54] [Gestor] ✅ Dimensionamiento técnico completado.
-[16:04:54] [Gestor] ▶ Paso 4: Optimización Económica y Flujo de Caja
-[16:04:54] [Optimizador] 🚀 Iniciando proceso para cliente 10...
-[16:04:54] [Optimizador] 📖 [1/4] Leyendo parámetros de entrada...
-[16:04:54] [Optimizador] 🔄 PDEM estandarizado: Transpuesto de (24, 12) a (12, 24) (Meses x Horas)
-[16:04:54] [Optimizador] 📂 Cargando perfil de generación: PGEN_11_CTest1.xlsx
-[16:04:54] [Optimizador] ✅ PGEN estandarizado y cargado. Forma: (12, 24) (Meses x Horas)
-[16:04:54] [Optimizador] ⚙️ [2/4] Resolviendo optimización matemática...
-[16:04:54] [Optimizador] 📅 Modo: Optimización anual (288 periodos = 12 meses × 24 horas)
-[16:04:54] [Optimizador] 📊 Total demanda anual: 84.08 kWh
-[16:04:54] [Optimizador] 📊 Total generación anual: 0.00 kWh
-[16:04:54] [Optimizador] ✅ Proceso finalizado.
-[16:04:54] [Gestor] 🏁 Ejecución completada exitosamente en 8.32 segundos.
+--- Inicio de Ejecución: 2026-06-16 21:29:11 ---
+[21:29:11] [Gestor] 🚀 Iniciando pipeline de simulación
+[21:29:11] [Gestor] ▶ Paso 1: Preprocesamiento de Encuesta
+[21:29:14] [Gestor] ✅ Preprocesamiento finalizado.
+[21:29:14] [Gestor] ▶ Paso 2: Análisis de Cliente y Demanda
+[21:29:14] [Cliente] Iniciando ejecución de cálculos para el cliente.
+[21:29:14] [Cliente] Marca temporal                     : 2025-05-11 14:22:05
+[21:29:14] [Cliente] Nombre                             : Cliente Test1
+[21:29:14] [Cliente] Correo electrónico:                : cliente.test1@kva.com
+[21:29:14] [Cliente] Direccion                          : Santiago
+[21:29:14] [Cliente] Tipo de solución                   : OffGrid
+[21:29:14] [Cliente] Tamaño casa                        : 110
+[21:29:14] [Cliente] N° habitaciones                    : 3
+[21:29:14] [Cliente] N° baños                           : 2
+[21:29:14] [Cliente] Número de personas que viven en la casa:: Cuatro personas
+[21:29:14] [Cliente] Descripción de los miembros de la familia (Ejemplo: 2 adultos y un niño): : Nadie
+[21:29:14] [Cliente] Teletrabajo                        : Si
+[21:29:14] [Cliente] Calefacción                        : Si
+[21:29:14] [Cliente] N° habitaciones con calefaccion    : 2.0
+[21:29:14] [Cliente] Desea calefacción                  : No
+[21:29:14] [Cliente] N° habitaciones que quiere calefaccionar: nan
+[21:29:14] [Cliente] Electrodomésticos Extra            : Secadora de Ropa, Horno Eléctrico, Máquina de Café, Ventilador Techo, Equipo de Música, Cine en casa (Sistema de sonido + Pantalla gigante, proyector o similar)
+[21:29:14] [Cliente] Zona                               : Metropolitana
+[21:29:14] [Cliente] Tipo Zona                          : Z1
+[21:29:14] [Gestor] ✅ Perfiles de cliente generados.
+[21:29:14] [Gestor] ▶ Paso 3: Dimensionamiento Técnico (Generación y Equipos)
+[21:29:14] [Sizing] 🔄 Iniciando dimensionamiento del cliente...
+[21:29:15] [Gestor] ✅ Dimensionamiento técnico completado.
+[21:29:15] [Gestor] ▶ Paso 4: Optimización Económica y Flujo de Caja
+[21:29:15] [Optimizador] 🚀 Iniciando proceso para cliente 10...
+[21:29:15] [Optimizador] 📖 [1/4] Leyendo parámetros de entrada...
+[21:29:15] [Optimizador] 🔄 PDEM estandarizado: Transpuesto de (24, 12) a (12, 24) (Meses x Horas)
+[21:29:15] [Optimizador] 📂 Cargando perfil de generación: PGEN_11_CTest1.xlsx
+[21:29:15] [Optimizador] ✅ PGEN estandarizado y cargado. Forma: (12, 24) (Meses x Horas)
+[21:29:15] [Optimizador] ⚙️ [2/4] Resolviendo optimización matemática...
+[21:29:15] [Optimizador] 📅 Modo: Optimización anual (288 periodos = 12 meses × 24 horas)
+[21:29:15] [Optimizador] 📊 Total demanda anual: 84.08 kWh
+[21:29:15] [Optimizador] 📊 Total generación anual: 0.00 kWh
+[21:29:15] [Optimizador] ✅ Proceso finalizado.
+[21:29:15] [Gestor] 🏁 Ejecución completada exitosamente en 3.30 segundos.

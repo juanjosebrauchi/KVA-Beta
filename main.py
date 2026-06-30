@@ -48,7 +48,7 @@ class GestorProyecto:
                 indice, 
                 cliente_data, 
                 self.config.path_perfil_base, 
-                self.config.path_perfil_extra, 
+                self.config.path_perfil_extra,
                 self.config.path_BBDD_clientes, 
                 self.config.path_consumo_zona, 
                 vector_prueba=vector, 

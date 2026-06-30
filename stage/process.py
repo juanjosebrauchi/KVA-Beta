@@ -137,7 +137,6 @@ class Preprocess:
             'Equipo de Música',
             'Cine en casa (Sistema de sonido + Pantalla gigante, proyector o similar)']
         extras = self.cliente_actual.get('Electrodomésticos Extra', "")
-        print("ALojamiento:   ",extras)
 
         if not isinstance(extras, str) or not extras.strip():
             # Si está vacío, crear vector con ceros
@@ -158,6 +157,7 @@ class Preprocess:
                 vector.append(1 if item in extras else 0)
                 # print(vector)
 
+        print("-------AQUI-------L: 160, Process ----->\n")
         self.vector_prueba = vector
         print("\nVector de Electrodomésticos: ", self.vector_prueba)
 

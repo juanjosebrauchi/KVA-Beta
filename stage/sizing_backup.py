@@ -120,6 +120,7 @@ class Dimensionamiento:
         if archivo_cliente is None:
             raise FileNotFoundError(f"❌ No se encontró un archivo para el cliente con índice {codigo} en {base_path}")
 
+        print("------AQUI--------, Sizing: 123")
         ruta_completa = os.path.join(base_path, archivo_cliente)
         print(f"📂 Archivo encontrado: {archivo_cliente}")
 

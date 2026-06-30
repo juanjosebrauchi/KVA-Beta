@@ -46,7 +46,12 @@ class Cliente:
             print(f"[Cliente] {mensaje}")
 
     def ejecutar(self, ruta_perfil_base = None, ruta_perfil_extra = None, path_BBDD_clientes = None):
-        self.log(self.datos)
+        print("---")
+        print("\n🚀 Iniciando ejecución de cálculos para el cliente.")
+        self.log("Iniciando ejecución de cálculos para el cliente.")
+        
+        for key, value in self.datos.items():
+            self.log(f"{key:35}: {value}".format(key=key, value=value))
         """Método principal que ejecuta todos los cálculos del cliente"""
         ##Carga de Perfiles
         if ruta_perfil_base is None:
@@ -71,9 +76,11 @@ class Cliente:
         self.calcular_factores_trapezoidales()
         self.function_heat(self.path_consumo_zona)
 
-        return self.perfil_consumo_total_anual, self.Dem_Max      #Cambio 17-02-26
+        return self.perfil_consumo_total_anual, self.Dem_Max      #Cambio 17-02-26 se agrego Dem_Max
 
     def cargar_perfil_consumo_base(self, ruta_archivo):
+        print("---")
+        print("\n📊 Cargando perfil base de consumo desde:", ruta_archivo)
         try:
             self.df_consumo_base = pd.read_excel(ruta_archivo, nrows=144)
             print()
@@ -82,7 +89,9 @@ class Cliente:
             print(f"❌ Error al cargar perfil base de consumo: {e}")
             self.df_consumo_base = None
 
-    def cargar_perfil_consumo_extra(self, ruta_archivo):    
+    def cargar_perfil_consumo_extra(self, ruta_archivo):
+        print("---")
+        print("\n📊 Cargando perfil extra de consumo desde:", ruta_archivo)    
         try:
             self.df_consumo_extra = pd.read_excel(ruta_archivo, nrows=144)
             print("📊 Perfil extra de consumo cargado correctamente.")
@@ -94,13 +103,15 @@ class Cliente:
         """Extiende el vector de electrodomésticos con una regla basada en 'Cine en casa'.
         Guarda el resultado en self.vector_prueba_extendido.
         """
-        
+        print("---")
+        print("\n🎬 Extendiendo vector de electrodomésticos con regla basada en 'Cine en casa'")
         if self.vector_prueba is None:
             print("⚠️ No hay vector_prueba definido.")
             return
 
         # Copia segura del vector actual
         vector_extendido = self.vector_prueba.copy()
+        print("Vector")
         print(vector_extendido)
 
         # Evaluar el último valor del vector
@@ -112,10 +123,12 @@ class Cliente:
         # Guardar en nuevo atributo sin sobrescribir el original
         self.vector_prueba_extendido = vector_extendido
         print()
-        print("🧩 Vector con consumos domésticos extendido (con Cine en casa):", self.vector_prueba_extendido)
-        print()
+        print("🧩 Vector con consumos domésticos extendido (con Cine en casa):")
+        print(self.vector_prueba_extendido)
 
     def calcular_numero_luces_perfil_extra(self):
+        print("---")
+        print("\n💡 Calculando número de luces para el perfil extra basado en número de habitaciones")
         try:
             habitaciones = int(self.datos.get('N° habitaciones', 0))
             banos = int(self.datos.get('N° baños', 0))
@@ -125,6 +138,8 @@ class Cliente:
             self.n_luces = None
 
     def calculo_consumo_total_perfil_base(self):
+        print("---")
+        print("\n⚡ Calculando consumo total del perfil base incorporando el número de luces y la opción de teletrabajo...")
         try:
             if self.df_consumo_base is None:
                 print("⚠️ No se ha cargado el perfil base de consumo.")
@@ -140,10 +155,10 @@ class Cliente:
             # Multiplicar 'Bath_Light' por el número de luces
             df['Bath_Light'] = df['Bath_Light'] * self.n_luces
             print(f"💡 Número total de luces: {self.n_luces}")
-            print(df['Bath_Light'])
 
             # Verificar si el cliente está en teletrabajo
             home_office = self.datos.get('Teletrabajo', '').strip()
+            
             print()
             print(f"🏠 Teletrabajo: {home_office}")
             if home_office == 'Si':
@@ -154,8 +169,7 @@ class Cliente:
             self.consumo_total = df[['Hour', 'Minute', 'Consumo_Total']]
             print()
             print("⚡ Consumo total de perfil base incorporando el número de luces y la opción de teletrabajo.")
-            print(self.consumo_total)
-            print("🔢 Suma total del consumo base:", self.consumo_total['Consumo_Total'].sum(), "[kWh]")
+            print("Consumo base: {:.2f} [kWh/dia]".format(self.consumo_total['Consumo_Total'].sum()))
 
         except Exception as e:
             print(f"❌ Error al calcular consumo total: {e}")
@@ -163,6 +177,8 @@ class Cliente:
     
     def filtrar_consumo_por_dispositivos_cliente(self):
         """Filtra el DataFrame de consumo extra usando el vector extendido del cliente."""
+        print("---")
+        print("\n🔍 Filtrando consumo extra por dispositivos del cliente usando el vector extendido.")
         if self.vector_prueba_extendido is None:
             print("⚠️ No se ha generado el vector extendido.")
             return
@@ -181,9 +197,10 @@ class Cliente:
             df_filtrado = self.df_consumo_extra[columnas_seleccionadas].mul(self.vector_prueba_extendido, axis=1)
             suma_columnas = df_filtrado.sum()
             suma_mayor_a_cero = suma_columnas[suma_columnas > 0]
-            print()
-            print("\n📊 Consumo de electrodomésticos del cliente:")
-            print(suma_mayor_a_cero)
+            print("\n📊 Consumo de electrodomésticos Extra del cliente:")
+          
+            for dispositivo, consumo in suma_mayor_a_cero.items():
+                print("{:28}: {:>5.2f} [kWh/dia]".format(dispositivo, consumo))
 
             # Agregar columnas Hour y Minute nuevamente si están
             if 'Hour' in self.df_consumo_extra.columns and 'Minute' in self.df_consumo_extra.columns:
@@ -197,7 +214,8 @@ class Cliente:
             self.df_cliente_filtrado = None
 
     def resumir_consumo_extra(self):
-
+        print("---")
+        print("\n📊 Resumiendo consumo total de electrodomésticos extra filtrados para el cliente...")
         """Calcula el consumo total por intervalo de los electrodomésticos extra filtrados."""
         if self.df_cliente_filtrado is None:
             print("⚠️ No hay DataFrame filtrado disponible.")
@@ -206,7 +224,6 @@ class Cliente:
         try:
             # df = self.df_cliente_filtrado.copy()
             df = self.df_cliente_filtrado.copy()
-            print(df.columns)
 
             # Sumar consumo por fila
             df['TotalConsumo'] = df.drop(columns=['Hour', 'Minute'], errors='ignore').sum(axis=1)
@@ -222,12 +239,8 @@ class Cliente:
             # Reordenar columnas si es necesario
             columnas_finales = ['Hour', 'Minute', 'TotalConsumo']
             columnas_existentes = [col for col in columnas_finales if col in df.columns]
-
             print("\n📊 Consumo Total Electrodomésticos Extra")
-            print("-----------------------------------------")
-            print(df[columnas_existentes])
-            print("-----------------------------------------")
-            print("🔌 Consumo total acumulado:", df['TotalConsumo'].sum(), "[Wh]")
+            print("🔌 Consumo total acumulado : {:.2f} [kWh]".format(df['TotalConsumo'].sum()))
 
             self.df_consumo_extra_resumen = df[columnas_existentes + ['TotalConsumo'] if 'TotalConsumo' not in columnas_existentes else columnas_existentes]
 
@@ -237,6 +250,9 @@ class Cliente:
 
     def consumo_baseyextra_total(self):
         """Combina el consumo total del perfil base y el perfil extra filtrado."""
+        print("---")
+        print("\n⚡ Combinando consumo total del perfil base y el perfil extra filtrado para obtener el consumo total del cliente...")
+
         if self.consumo_total is None or self.df_consumo_extra_resumen is None:
             print("⚠️ No se han calculado los consumos base o extra.")
             return
@@ -246,28 +262,30 @@ class Cliente:
             df_base = self.consumo_total.copy()
             df_extra = self.df_consumo_extra_resumen.copy()
 
+            print("Consumo Base y Extra")
+            print("Consumo Base : {:.2f} [kWh/dia]".format(df_base['Consumo_Total'].sum()))
+            print("Consumo Extra: {:.2f} [kWh/dia]".format(df_extra['TotalConsumo'].sum()))
+
             # Unir por Hour y Minute
             df_combined = pd.merge(df_base, df_extra, on=['Hour', 'Minute'], how='outer', suffixes=('_Base', '_Extra'))
-            print("\n📊 Combinando consumos base y extra:")
-            print(df_combined) #Cambio 03.02
-            print("\n📊 Combinando consumos base y extra:")
-            print("Perfil Combinado: ",df_combined)
-    
 
             # Calcular el consumo total combinado
+            print("\n📊 Combinando consumos base y extra.")
             df_combined['Consumo_Total'] = df_combined['Consumo_Total'].fillna(0) + df_combined['TotalConsumo'].fillna(0)
             self.df_cliente_total = df_combined[['Hour', 'Minute', 'Consumo_Total']].copy()
             self.df_cliente_total.loc[:, 'Consumo_Total'] = self.df_cliente_total['Consumo_Total'].astype(float)
             # self.df_cliente_total = self.df_cliente_total.fillna(0)
-
             print("🔍 Resumen de consumo total del cliente:")
-            print(self.df_cliente_total)
-            print("⚡ Total de consumo:", self.df_cliente_total['Consumo_Total'].sum(), "[kWh]")
+            print("Consumo Demanda Total: {:.2f} [kWh/dia]".format(self.df_cliente_total['Consumo_Total'].sum()))
+            #print("⚡ Total de consumo:", self.df_cliente_total['Consumo_Total'].sum(), "[kWh]")
 
         except Exception as e:
             print(f"❌ Error al combinar consumos: {e}")
 
     def generador_factor_meses(self, path_csv):
+        #Genera un vector de factores mensuales basado en el consumo anual del cliente comparado con la base de datos.
+        print("---")
+        print("\n📊 Generando factores mensuales de consumo para el cliente...")
         try:
             # Cargar la base de datos de clientes
             data_BBDD = pd.read_csv(path_csv, delimiter=';')
@@ -292,10 +310,13 @@ class Cliente:
             # Extraer los valores de consumo mensual y convertir a lista
             # client_values = cliente_info.iloc[:, 1:].values.flatten().tolist()
             client_values = cliente_info.iloc[1:].values.flatten().tolist() 
-            print(client_values)
-            # print("Datos numéricos")
-            # print(client_values)
-
+            meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
+                     'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
+            
+            print("Coonsumo Anual")
+            for x in range(12):
+                print("{:}: {:d} [kWh/mes]".format(meses[x], client_values[x]))
+            
             # Encontrar el valor máximo de consumo mensual
             max_dem = max(client_values)
             print("Demanda máxima: ", max_dem)
@@ -303,10 +324,9 @@ class Cliente:
             # Calcular el factor mensual
             factor_mes = [round(val / max_dem,5) for val in client_values]
             print()
-            print("-------AQUI--------L:306 Clients\n")
             print("Factores mes\n")
             for n in range(12):
-                print(f"{n+1}: {factor_mes[n]}")
+                print(f"{meses[n]}: {factor_mes[n]:.2f} [-]")
 
             # Guardar el DataFrame con factores mensuales
             self.factor_mes_cliente = pd.DataFrame(factor_mes, columns=["Factor"])
@@ -315,19 +335,15 @@ class Cliente:
             energia_dia = self.df_cliente_total['Consumo_Total'].sum()  # kWh/día aprox
             factor_dia = (max_dem / 30) / energia_dia
             self.factor_dia = factor_dia
-   
+            
             print("\n📆 Consumo diario estimado del perfil:", round(energia_dia, 2), "[kWh/día]")
             print("📆 Consumo diario máximo basado en BBDD:", round(max_dem / 30, 2), "[kWh/día]")
             print("📈 Factor de escala diario:", round(factor_dia, 4))
-
 
             # Aplicar el factor al perfil horario original
             df = self.df_cliente_total.copy()
             df['TotalConsumo'] = df['Consumo_Total'] * factor_dia
             self.pdem_escalado = df[['Hour', 'Minute', 'TotalConsumo']]
-
-            print("\n✅ Perfil horario escalado del cliente:")
-            print(self.pdem_escalado)
 
         except Exception as e:
             print(f"❌ Error en generador_factor_meses: {e}")
@@ -337,6 +353,8 @@ class Cliente:
         Agrupa el perfil de consumo escalado (cada 10 minutos) en un perfil horario (1 hora).
         Guarda el resultado en self.perfil_1h.
         """
+        print("---")
+        print("\n⏱️ Agrupando perfil de consumo escalado a intervalos horarios...")
         try:
             if self.pdem_escalado is None:
                 print("⚠️ No hay perfil escalado disponible para agrupar.")
@@ -363,16 +381,14 @@ class Cliente:
                     contador = 0
 
             self.perfil_1h = pd.DataFrame(consumo_1h, columns=["Consumo_Total_1h"])
-
-            print("\n📉 Perfil de consumo reducido a 1 hora:")
-            print(self.perfil_1h)
+            print()
+            print("📉 Perfil de consumo reducido a 1 hora:")
+            print(self.perfil_1h['Consumo_Total_1h'])
             print(f"\n🔍 Consumo total original (10min): {sum(perfil_10min):.2f} kWh")
             print(f"🔍 Consumo total resumido (1h): {sum(consumo_1h):.2f} kWh")
 
-            print("-------AQUI-------L: 372, Clients\n")
             self.Dem_Max = max(consumo_1h)  # Guardar la demanda máxima del perfil horario para uso posterior
             print("Demanda máxima del perfil horario (1h): {:.2f} kWh".format(self.Dem_Max))
-            print("------------------------------")
         except Exception as e:
             print(f"❌ Error en agrupar_perfil_horario: {e}")
 
@@ -381,23 +397,26 @@ class Cliente:
         Genera una matriz 24x12 de consumo ajustado por factores mensuales.
         Guarda el resultado en self.consumo_anual.
         """
+        print("---")
+        print("\n📊 Calculando matriz de consumo anual ajustado por factores mensuales...")
         nombres_meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
                         'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
         
-        print(self.perfil_1h['Consumo_Total_1h'])
-
         consumo_horario = self.perfil_1h['Consumo_Total_1h'] if isinstance(self.perfil_1h, pd.DataFrame) else self.perfil_1h
-        print('Factor')
-        print(self.factor_mes_cliente['Factor'])
+        
         factores_mensuales = self.factor_mes_cliente['Factor'] if isinstance(self.factor_mes_cliente, pd.DataFrame) else self.factor_mes_cliente
-        print("\n📊 Generando matriz de consumo anual...")
-        print(factores_mensuales)
+        print()
+        print('Factores Mensuales del cliente:')
+        for i in range(12):
+            print(f"{nombres_meses[i]:11}: {factores_mensuales[i]:.2f} [-]")
 
         self.consumo_anual = pd.DataFrame(
             data=[[round(h * f, 3) for f in factores_mensuales] for h in consumo_horario],
             columns=nombres_meses,
             index=[str(i) for i in range(24)]
         )
+        
+        print("\n📊 Generando matriz de consumo anual...")
         print()
         print()
         print("📅 Matriz de consumo anual (kWh por hora para cada mes):")
@@ -408,6 +427,10 @@ class Cliente:
         Determina el rango de meses de invierno según la zona del cliente.
         Guarda los resultados en atributos.
         """
+        print("---")
+        print("\n❄️ Determinando rango de invierno según la zona del cliente...")
+        nombres_meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+                        'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
         meses_invierno_por_zona = {
             'Z1': {'inicio': 6, 'fin': 8},
             'Z2': {'inicio': 5, 'fin': 9},
@@ -422,7 +445,11 @@ class Cliente:
         if zona in meses_invierno_por_zona:
             self.inicio_invierno = meses_invierno_por_zona[zona]['inicio']
             self.fin_invierno = meses_invierno_por_zona[zona]['fin']
-            print(f"🌨️ Rango de invierno para zona {zona}: {self.inicio_invierno} a {self.fin_invierno} meses.")
+            print(f"Zona del cliente: {zona}")
+            print(f"🌨️ Rango de invierno para zona {zona}: {nombres_meses[self.inicio_invierno - 1]} a {nombres_meses[self.fin_invierno - 1]}.")
+            print(f"📌 Meses de invierno:")
+            for m in range(self.inicio_invierno, self.fin_invierno + 1):
+                print(f"- {nombres_meses[m - 1]}")
         else:
             print("Zona no reconocida. Se usará rango por defecto (junio-agosto).")
             self.inicio_invierno = 6
@@ -430,11 +457,13 @@ class Cliente:
 
     def calcular_factores_trapezoidales(self):
         """Calcula los factores mensuales de calefacción con forma trapezoidal basados en la zona del cliente."""
+        print("---")
+        print("\n📊 Calculando factores trapezoidales de calefacción para cada mes")
         mes_inicio = self.inicio_invierno
         mes_fin = self.fin_invierno
         zona = self.datos.get('Tipo Zona')
         factores = [0.0] * 12
-        print("-------AQUI-------L: 437, Clients\n")
+
         print("Zona del cliente: ", zona)
         if zona != 'Z5':
             for i in range(mes_inicio - 1):
@@ -449,13 +478,12 @@ class Cliente:
         else:
             factores = [0.1] * 12            
 
-        print("-------AQUI-------L: 452, Clients\n")
-        print("Factores trapezoidales calculados para calefacción:\n")
-        print(factores)
-
         self.factores_trapezoidales = factores
-        print("\n📊 Factores trapezoidales de calefacción:")
-        print(factores)
+
+        print("📊 Factores trapezoidales de calefacción:\n")
+        meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
+        for i in range(12):
+            print(f"{meses[i]}: {factores[i]:.2f} [-]")
 
         # Opcional: Mostrar gráfico
         # meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
@@ -470,6 +498,8 @@ class Cliente:
         # plt.show()
 
     def function_heat(self, path_zone_heat: str):
+        print("---")
+        print("\n🔥 Calculando perfil de demanda de calefacción basado en zona y factores trapezoidales")
         nombres_meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
                         'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
 
@@ -490,11 +520,17 @@ class Cliente:
             horas = data_Zone_Heat['T'].tolist()
 
             Perfil_Mensual = pd.DataFrame(index=horas)
-            print("-------AQUI-------L: 493, Clients\n")
-            print("Zona del cliente: \n", zona_cliente)
-            print("Perfil Calefacción base por zona (kW): \n", data_Zone_Heat[zona_cliente])
+            #print("Zona del cliente: \n", zona_cliente)
+            print(f"Perfil Calefacción base para zona {zona_cliente} [kW]:")
+            print("Hora  | Potencia [kW]")
+            for h, val in zip(data_Zone_Heat['T'], data_Zone_Heat[zona_cliente]):
+                print(f"{h:02d}:00 | {val:6.2f}")
+
+            #print(data_Zone_Heat[zona_cliente])
+            print("\nTotal de calefacción requerida : {} [kWh/dia][Zona {}]\n".format(data_Zone_Heat[zona_cliente].sum(), zona_cliente))
+            print("{:11} | {:6} [-] | {:6} [kW]".format("Mes", "Factor", "POT_kW"))
             for i, factor in enumerate(Factores_meses):
-                print(f"Mes: {nombres_meses[i]}, Factor: {factor}, Potencia: {POT_kW}")
+                print("{:11} | {:^10.2f} | {:6.2f} ".format(nombres_meses[i], factor, POT_kW))
                 columna = data_Zone_Heat[zona_cliente] * factor * POT_kW
                 Perfil_Mensual[nombres_meses[i]] = columna.values
 
@@ -513,7 +549,6 @@ class Cliente:
             self.clp_calefaccion = CLP_heat
             self.potencia_calefaccion = POT_kW
             self.perfil_consumo_total_anual = Perfil_Demanda_Cliente
-
             # Log para inspección
             print("📊 Perfil de demanda con calefacción ajustado:")
             print(self.perfil_consumo_total_anual)
