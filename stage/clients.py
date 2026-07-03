@@ -510,11 +510,24 @@ class Cliente:
         try:
             Rooms_heat = info_cliente.get('N° habitaciones que quiere calefaccionar', 0)
             if pd.isna(Rooms_heat): Rooms_heat = 0
-
+            
             M2_heat = Rooms_heat * 15
             BTU_heat = Rooms_heat * 9000
             CLP_heat = Rooms_heat * 301.717
-            POT_kW = Rooms_heat * 2.63
+
+            # Cambio DL: Se agrego un factor de uso de la BC segun la zona del cliente
+            factores_uso_zona = {
+                'Z1': 0.3,
+                'Z2': 0.4,  
+                'Z3': 0.45,
+                'Z4': 0.6
+            }
+
+            # Se obtiene el factor de uso según la zona
+            factor_uso = factores_uso_zona.get(zona_cliente, 0.3)  # Por defecto 0.3 si no se encuentra la zona
+
+            # Se calcula la potencia en kW considerando el factor de uso específico de la zona
+            POT_kW = Rooms_heat * 2.63 * factor_uso # Potencia en kW considerando el factor de utilizacion específico de la zona
 
             data_Zone_Heat = pd.read_excel(path_zone_heat)
             horas = data_Zone_Heat['T'].tolist()
