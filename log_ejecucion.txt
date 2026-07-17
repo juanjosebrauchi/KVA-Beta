@@ -1,9 +1,9 @@
---- Inicio de Ejecución: 2026-04-21 16:04:46 ---
-[16:04:46] [Gestor] 🚀 Iniciando pipeline de simulación
-[16:04:46] [Gestor] ▶ Paso 1: Preprocesamiento de Encuesta
-[16:04:52] [Gestor] ✅ Preprocesamiento finalizado.
-[16:04:52] [Gestor] ▶ Paso 2: Análisis de Cliente y Demanda
-[16:04:52] [Cliente] Marca temporal                                                                                              2025-05-11 14:22:05
+--- Inicio de Ejecución: 2026-07-17 14:43:17 ---
+[14:43:17] [Gestor] 🚀 Iniciando pipeline de simulación
+[14:43:17] [Gestor] ▶ Paso 1: Preprocesamiento de Encuesta
+[14:43:22] [Gestor] ✅ Preprocesamiento finalizado.
+[14:43:22] [Gestor] ▶ Paso 2: Análisis de Cliente y Demanda
+[14:43:22] [Cliente] Marca temporal                                                                                              2025-05-11 14:22:05
 Nombre                                                                                                            Cliente Test1
 Correo electrónico:                                                                                       cliente.test1@kva.com
 Direccion                                                                                                              Santiago
@@ -22,19 +22,174 @@ Electrodomésticos Extra                                                       S
 Zona                                                                                                              Metropolitana
 Tipo Zona                                                                                                                    Z1
 Name: 10, dtype: object
-[16:04:53] [Gestor] ✅ Perfiles de cliente generados.
-[16:04:53] [Gestor] ▶ Paso 3: Dimensionamiento Técnico (Generación y Equipos)
-[16:04:53] [Sizing] 🔄 Iniciando dimensionamiento del cliente...
-[16:04:54] [Gestor] ✅ Dimensionamiento técnico completado.
-[16:04:54] [Gestor] ▶ Paso 4: Optimización Económica y Flujo de Caja
-[16:04:54] [Optimizador] 🚀 Iniciando proceso para cliente 10...
-[16:04:54] [Optimizador] 📖 [1/4] Leyendo parámetros de entrada...
-[16:04:54] [Optimizador] 🔄 PDEM estandarizado: Transpuesto de (24, 12) a (12, 24) (Meses x Horas)
-[16:04:54] [Optimizador] 📂 Cargando perfil de generación: PGEN_11_CTest1.xlsx
-[16:04:54] [Optimizador] ✅ PGEN estandarizado y cargado. Forma: (12, 24) (Meses x Horas)
-[16:04:54] [Optimizador] ⚙️ [2/4] Resolviendo optimización matemática...
-[16:04:54] [Optimizador] 📅 Modo: Optimización anual (288 periodos = 12 meses × 24 horas)
-[16:04:54] [Optimizador] 📊 Total demanda anual: 84.08 kWh
-[16:04:54] [Optimizador] 📊 Total generación anual: 0.00 kWh
-[16:04:54] [Optimizador] ✅ Proceso finalizado.
-[16:04:54] [Gestor] 🏁 Ejecución completada exitosamente en 8.32 segundos.
+[14:43:23] [Gestor] ✅ Perfiles de cliente generados.
+[14:43:23] [Gestor] ▶ Paso 3: Dimensionamiento Técnico (Generación y Equipos)
+[14:43:23] [Sizing] 🔄 Iniciando dimensionamiento del cliente...
+[14:43:24] [Gestor] ✅ Dimensionamiento técnico completado.
+[14:43:24] [Gestor] ▶ Paso 4: Optimización Económica y Flujo de Caja
+[14:43:24] [Optimizador] 🚀 Iniciando proceso para cliente 10...
+[14:43:24] [Optimizador] 🐛 [DEBUG] PGen cargado desde Excel. Forma: (12, 24)
+[14:43:24] [Optimizador] 🐛 [DEBUG] PDem cargado desde Excel. Forma: (12, 24)
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → cap_fv = 3.6
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → cap_bat = 3.845
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → p_ch_max = 1.6  (desde 'pot_inversor')
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → p_dis_max = 1.6  (desde 'pot_inversor')
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → p_ch_max = 1.6
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → p_dis_max = 1.6
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → e_init = 1.9225
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → e_min = 0.38450000000000006
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → e_max = 3.4605
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → e_final_min = 0.0
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → eff_ch = 0.9
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → eff_dis = 0.9
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → batt_cycle_cost = 2.0
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → batt_cycle_cost  (desde 'cost_battery') = 2.0
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → batt_cycle_cost  (desde 'bat_cycle_cost') = 2.0
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → no_simultaneous_charge_discharge = True
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → ongrid = 0.0
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → _cost_grid_scalar = 130.0  (desde 'cost_grid')
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → _cost_grid_sell_scalar = 0.08  (desde 'cost_grid_sell')
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → p_imp_max = 100.0
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → p_exp_max = 0.0
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → no_simultaneous_imp_exp = True
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → pmin_diesel = 0.0
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → pmax_diesel = 0.0
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → cost_diesel = 0.0
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → var_cost_diesel = 0.2
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → startup_cost_diesel = 0.0
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → shutdown_cost_diesel = 0.0
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → ramp_up_diesel = 1000000.0
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → ramp_down_diesel = 1000000.0
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → min_up_time_diesel = 0
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → min_down_time_diesel = 0
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → u_unit_diesel = 0
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → p_init_d = 0.0
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → allow_ls = True
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → ls_penalty = 10000.0
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → inv_fv = 1240000.0
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → inv_storage = 915000.0
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → inv_inv_fv = 0.0
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → inv_inv_storage = 3240000.0
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → inv_estructura = 500000.0
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → inv_materiales = 500000.0
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → costo_capex = 0.0
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → tecnologia_bateria = LITIO
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → horizonte = 20.0
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → tasa_descuento = 0.06
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → costo_energia = 0.15
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → costo_potencia_suministrada = 0.0
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → costo_potencia_punta = 0.0
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → precio_inyeccion = 0.05
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → incremento_precio_anual = 0.05
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → caida_eficiencia_fv_anual = 0.007
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → incremento_mantencion_anual = 0.05
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → mant_fv_pct = 0.006
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → mant_storage_pct = 0.01
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → recambio_inversor = 10.0
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → solver_mipgap = 0.01
+[14:43:24] [Optimizador] 🐛 [DEBUG] Dim override → solver_timeout_s = 200.0
+[14:43:24] [Optimizador] 🐛 [DEBUG] _dim_overrides_cache = {'inv_fv': 1240000.0, 'inv_storage': 915000.0, 'inv_inv_fv': 0.0, 'inv_inv_storage': 3240000.0, 'inv_estructura': 500000.0, 'inv_materiales': 500000.0, 'tecnologia_bateria': 'LITIO', 'horizonte': 20.0, 'tasa_descuento': 0.06, 'costo_energia': 0.15, 'costo_potencia_suministrada': 0.0, 'costo_potencia_punta': 0.0, 'precio_inyeccion': 0.05, 'incremento_precio_anual': 0.05, 'caida_eficiencia_fv_anual': 0.007, 'incremento_mantencion_anual': 0.05, 'mant_fv_pct': 0.006, 'mant_storage_pct': 0.01, 'recambio_inversor': 10.0, 'cap_fv': 3.6, 'cap_bat': 3.845, 'p_ch_max': 1.6, 'p_dis_max': 1.6, 'e_init': 1.9225, 'e_min': 0.38450000000000006, 'e_max': 3.4605, 'e_final_min': 0.0, 'eff_ch': 0.9, 'eff_dis': 0.9, 'batt_cycle_cost': 2.0, 'no_simultaneous_charge_discharge': True, 'ongrid': 0.0, '_cost_grid_scalar': 130.0, '_cost_grid_sell_scalar': 0.08, 'p_imp_max': 100.0, 'p_exp_max': 0.0, 'no_simultaneous_imp_exp': True, 'pmin_diesel': 0.0, 'pmax_diesel': 0.0, 'cost_diesel': 0.0, 'var_cost_diesel': 0.2, 'startup_cost_diesel': 0.0, 'shutdown_cost_diesel': 0.0, 'ramp_up_diesel': 1000000.0, 'ramp_down_diesel': 1000000.0, 'min_up_time_diesel': 0, 'min_down_time_diesel': 0, 'u_unit_diesel': 0, 'p_init_d': 0.0, 'allow_ls': True, 'ls_penalty': 10000.0, 'costo_capex': 0.0, 'solver_mipgap': 0.01, 'solver_timeout_s': 200.0}
+[14:43:24] [Optimizador] 🐛 Modo DEBUG activado. Overrides: ['inv_fv', 'inv_storage', 'inv_inv_fv', 'inv_inv_storage', 'inv_estructura', 'inv_materiales', 'tecnologia_bateria', 'horizonte', 'tasa_descuento', 'costo_energia', 'costo_potencia_suministrada', 'costo_potencia_punta', 'precio_inyeccion', 'incremento_precio_anual', 'caida_eficiencia_fv_anual', 'incremento_mantencion_anual', 'mant_fv_pct', 'mant_storage_pct', 'recambio_inversor', 'cap_fv', 'cap_bat', 'p_ch_max', 'p_dis_max', 'e_init', 'e_min', 'e_max', 'e_final_min', 'eff_ch', 'eff_dis', 'batt_cycle_cost', 'no_simultaneous_charge_discharge', 'ongrid', '_cost_grid_scalar', '_cost_grid_sell_scalar', 'p_imp_max', 'p_exp_max', 'no_simultaneous_imp_exp', 'pmin_diesel', 'pmax_diesel', 'cost_diesel', 'var_cost_diesel', 'startup_cost_diesel', 'shutdown_cost_diesel', 'ramp_up_diesel', 'ramp_down_diesel', 'min_up_time_diesel', 'min_down_time_diesel', 'u_unit_diesel', 'p_init_d', 'allow_ls', 'ls_penalty', 'costo_capex', 'solver_mipgap', 'solver_timeout_s']
+[14:43:24] [Optimizador] 📖 [1/4] Leyendo parámetros de entrada...
+[14:43:24] [Optimizador] 🐛 [DEBUG] Usando perfiles inyectados manualmente (pdem y pgen).
+[14:43:24] [Optimizador] 🐛 [DEBUG] PDEM shape: (12, 24) | PGEN shape: (12, 24)
+[14:43:24] [Optimizador] 🐛 [DEBUG] debug_overrides = {'inv_fv': 1240000.0, 'inv_storage': 915000.0, 'inv_inv_fv': 0.0, 'inv_inv_storage': 3240000.0, 'inv_estructura': 500000.0, 'inv_materiales': 500000.0, 'tecnologia_bateria': 'LITIO', 'horizonte': 20.0, 'tasa_descuento': 0.06, 'costo_energia': 0.15, 'costo_potencia_suministrada': 0.0, 'costo_potencia_punta': 0.0, 'precio_inyeccion': 0.05, 'incremento_precio_anual': 0.05, 'caida_eficiencia_fv_anual': 0.007, 'incremento_mantencion_anual': 0.05, 'mant_fv_pct': 0.006, 'mant_storage_pct': 0.01, 'recambio_inversor': 10.0, 'cap_fv': 3.6, 'cap_bat': 3.845, 'p_ch_max': 1.6, 'p_dis_max': 1.6, 'e_init': 1.9225, 'e_min': 0.38450000000000006, 'e_max': 3.4605, 'e_final_min': 0.0, 'eff_ch': 0.9, 'eff_dis': 0.9, 'batt_cycle_cost': 2.0, 'no_simultaneous_charge_discharge': True, 'ongrid': 0.0, '_cost_grid_scalar': 130.0, '_cost_grid_sell_scalar': 0.08, 'p_imp_max': 100.0, 'p_exp_max': 0.0, 'no_simultaneous_imp_exp': True, 'pmin_diesel': 0.0, 'pmax_diesel': 0.0, 'cost_diesel': 0.0, 'var_cost_diesel': 0.2, 'startup_cost_diesel': 0.0, 'shutdown_cost_diesel': 0.0, 'ramp_up_diesel': 1000000.0, 'ramp_down_diesel': 1000000.0, 'min_up_time_diesel': 0, 'min_down_time_diesel': 0, 'u_unit_diesel': 0, 'p_init_d': 0.0, 'allow_ls': True, 'ls_penalty': 10000.0, 'costo_capex': 0.0, 'solver_mipgap': 0.01, 'solver_timeout_s': 200.0}
+[14:43:24] [Optimizador] 💼 [DEBUG] Inversiones forzadas flujo caja → FV=1240000, Storage=915000, InvFV=0, InvStorage=3240000, Estructura=500000, Materiales=500000
+[14:43:24] [Optimizador] 🐛 [DEBUG] params activos: {'capacidad_fv': 3.6, 'baterias_cap': 3.845, 'costo_capex': 0.0, 'inv_storage': 915000.0, 'inv_fv': 1240000.0, 'inv_inv_fv': 0.0, 'inv_inv_storage': 3240000.0, 'inv_estructura': 500000.0, 'inv_materiales': 500000.0, 'horizonte': 20.0, 'tasa_descuento': 0.06, 'costo_energia': 0.15, 'costo_potencia_suministrada': 0.0, 'costo_potencia_punta': 0.0, 'precio_inyeccion': 0.05, 'incremento_precio_anual': 0.05, 'caida_eficiencia_fv_anual': 0.007, 'incremento_mantencion_anual': 0.05, 'mant_fv_pct': 0.006, 'mant_storage_pct': 0.01, 'recambio_inversor': 10.0, 'tecnologia_bateria': 'LITIO', 'ongrid': 0.0, 'no_simultaneous_charge_discharge': True, 'no_simultaneous_imp_exp': True, 'allow_ls': True}
+[14:43:24] [Optimizador] ⚙️ [2/4] Resolviendo optimización matemática...
+[14:43:24] [Optimizador] 📅 Modo: Optimización anual (288 periodos = 12 meses × 24 horas)
+[14:43:24] [Optimizador] 📊 Total demanda anual: 84.08 kWh
+[14:43:24] [Optimizador] 📊 Total generación anual: 156.12 kWh
+[14:43:24] [Optimizador] 🐛 [DEBUG] cost_grid override → compra = 130.0 USD/kWh | venta = 78.0 USD/kWh (60%)
+[14:43:24] [Optimizador] 🐛 [DEBUG] cost_grid_sell override → venta = 0.08 USD/kWh
+[14:43:24] [Optimizador] ⚙️  Flags del modelo → ongrid=False | allow_ls=True | no_sim_bat=True | no_sim_grid=True
+[14:43:24] [Optimizador] 🐛 [DEBUG] Override aplicado → p_ch_max = 1.6
+[14:43:24] [Optimizador] 🐛 [DEBUG] Override aplicado → p_dis_max = 1.6
+[14:43:24] [Optimizador] 🐛 [DEBUG] Override aplicado → e_init = 1.9225
+[14:43:24] [Optimizador] 🐛 [DEBUG] Override aplicado → e_min = 0.38450000000000006
+[14:43:24] [Optimizador] 🐛 [DEBUG] Override aplicado → e_max = 3.4605
+[14:43:24] [Optimizador] 🐛 [DEBUG] Override aplicado → e_final_min = 0.0
+[14:43:24] [Optimizador] 🐛 [DEBUG] Override aplicado → eff_ch = 0.9
+[14:43:24] [Optimizador] 🐛 [DEBUG] Override aplicado → eff_dis = 0.9
+[14:43:24] [Optimizador] 🐛 [DEBUG] Override aplicado → batt_cycle_cost = 2.0
+[14:43:24] [Optimizador] 🐛 [DEBUG] Override aplicado → no_simultaneous_charge_discharge = True
+[14:43:24] [Optimizador] 🐛 [DEBUG] Override aplicado → ongrid = 0.0
+[14:43:24] [Optimizador] 🐛 [DEBUG] Override aplicado → p_imp_max = 100.0
+[14:43:24] [Optimizador] 🐛 [DEBUG] Override aplicado → p_exp_max = 0.0
+[14:43:24] [Optimizador] 🐛 [DEBUG] Override aplicado → no_simultaneous_imp_exp = True
+[14:43:24] [Optimizador] 🐛 [DEBUG] Override aplicado → pmin_diesel = 0.0
+[14:43:24] [Optimizador] 🐛 [DEBUG] Override aplicado → pmax_diesel = 0.0
+[14:43:24] [Optimizador] 🐛 [DEBUG] Override aplicado → cost_diesel = 0.0
+[14:43:24] [Optimizador] 🐛 [DEBUG] Override aplicado → var_cost_diesel = 0.2
+[14:43:24] [Optimizador] 🐛 [DEBUG] Override aplicado → startup_cost_diesel = 0.0
+[14:43:24] [Optimizador] 🐛 [DEBUG] Override aplicado → shutdown_cost_diesel = 0.0
+[14:43:24] [Optimizador] 🐛 [DEBUG] Override aplicado → ramp_up_diesel = 1000000.0
+[14:43:24] [Optimizador] 🐛 [DEBUG] Override aplicado → ramp_down_diesel = 1000000.0
+[14:43:24] [Optimizador] 🐛 [DEBUG] Override aplicado → min_up_time_diesel = 0
+[14:43:24] [Optimizador] 🐛 [DEBUG] Override aplicado → min_down_time_diesel = 0
+[14:43:24] [Optimizador] 🐛 [DEBUG] Override aplicado → u_unit_diesel = 0
+[14:43:24] [Optimizador] 🐛 [DEBUG] Override aplicado → p_init_d = 0.0
+[14:43:24] [Optimizador] 🐛 [DEBUG] Override aplicado → allow_ls = True
+[14:43:24] [Optimizador] 🐛 [DEBUG] Override aplicado → ls_penalty = 10000.0
+[14:43:24] [Optimizador] ✅ Modelo construido con FO anual ponderada y ciclado mensual de SOC (día tipo repetible).
+[14:43:24] [Optimizador] 🔧 Solver seleccionado: glpk
+[14:43:24] [Optimizador] ⏱️ GLPK timeout configurado: 200 s
+[14:43:24] [Optimizador] 🎯 GLPK mipgap configurado: 0.0100
+[14:43:24] [Optimizador] 🧪 Iniciando solve (tee=True, timeout_s=200.0, mipgap=0.01)...
+[14:43:36] [Optimizador] ⏱️ Solve finalizado en 11.34 s
+[14:43:36] [Optimizador] 🧾 Estado solver: status=ok | termination=feasible
+[14:43:36] [Optimizador] 📋 ── Resumen de métricas ──────────────────────────────
+[14:43:36] [Optimizador]    Demanda anual total         :      2559.87 kWh
+[14:43:36] [Optimizador]    Consumo total servido       :      2146.16 kWh
+[14:43:36] [Optimizador]    Generación solar utilizada  :      2293.82 kWh
+[14:43:36] [Optimizador]    Excedente solar (surplus)   :      2448.09 kWh
+[14:43:36] [Optimizador]    Consumo desde red           :         0.00 kWh
+[14:43:36] [Optimizador]    Consumo diesel              :         0.00 kWh
+[14:43:36] [Optimizador]    Energía no suministrada     :       413.71 kWh
+[14:43:36] [Optimizador]    Demanda máxima              :         1.19 kW
+[14:43:36] [Optimizador]    Capacidad batería           :         3.85 kWh
+[14:43:36] [Optimizador]    Potencia máx carga          :         1.60 kW
+[14:43:36] [Optimizador]    Potencia máx descarga       :         1.60 kW
+[14:43:36] [Optimizador]    kWh desplazados batería     :      1406.60 kWh
+[14:43:36] [Optimizador]    Ciclos equiv. anuales       :       182.91 ciclos
+[14:43:36] [Optimizador] ────────────────────────────────────────────────────────
+[14:43:36] [Optimizador] ✅ Optimización completada. Costo total: USD 4139889.40
+[14:43:36] [Optimizador] 📊 [3/4] Realizando post-análisis...
+[14:43:36] [Optimizador]    ✔ Julio: DataFrame 24h × 13 cols generado.
+[14:43:36] [Optimizador] 
+              Demanda [kW]  PV_disponible [kW]  u_diesel [-]  u_carga_bat [-]  u_descarga_bat [-]  P_diesel [kW]  P_carga_bat [kW]  P_descarga_bat [kW]  P_pv [kW]  P_imp [kW]  P_exp [kW]  SOC [kWh]  P_ls [kW]
+Hora — Julio                                                                                                                                                                                                    
+0                   0.0159              0.0000             0                0                   1            0.0            0.0000               0.0159     0.0000         0.0         0.0     1.9048     0.0000
+1                   0.0095              0.0000             0                0                   1            0.0            0.0000               0.0095     0.0000         0.0         0.0     1.8943     0.0000
+2                   0.0159              0.0000             0                0                   1            0.0            0.0000               0.0159     0.0000         0.0         0.0     1.8766     0.0000
+3                   0.0111              0.0000             0                0                   1            0.0            0.0000               0.0111     0.0000         0.0         0.0     1.8642     0.0000
+4                   0.0675              0.0000             0                0                   1            0.0            0.0000               0.0675     0.0000         0.0         0.0     1.7892     0.0000
+5                   0.1192              0.0000             0                0                   1            0.0            0.0000               0.1192     0.0000         0.0         0.0     1.6568     0.0000
+6                   0.0429              0.0000             0                0                   1            0.0            0.0000               0.0429     0.0000         0.0         0.0     1.6091     0.0000
+7                   0.0318              0.0000             0                0                   1            0.0            0.0000               0.0318     0.0000         0.0         0.0     1.5738     0.0000
+8                   0.1192              0.0090             0                0                   1            0.0            0.0000               0.1102     0.0090         0.0         0.0     1.4514     0.0000
+9                   0.1351              0.3373             0                1                   0            0.0            0.2022               0.0000     0.3373         0.0         0.0     1.6334     0.0000
+10                  0.1811              0.7121             0                0                   0            0.0            0.0000               0.0000     0.1811         0.0         0.0     1.6334     0.0000
+11                  0.1216              0.9835             0                0                   0            0.0            0.0000               0.0000     0.1216         0.0         0.0     1.6334     0.0000
+12                  0.1549              1.1257             0                1                   0            0.0            0.7968               0.0000     0.9517         0.0         0.0     2.3505     0.0000
+13                  0.1684              1.1996             0                1                   0            0.0            1.0312               0.0000     1.1996         0.0         0.0     3.2786     0.0000
+14                  0.4568              1.2372             0                0                   0            0.0            0.0000               0.0000     0.4568         0.0         0.0     3.2786     0.0000
+15                  0.6229              1.1746             0                0                   0            0.0            0.0000               0.0000     0.6229         0.0         0.0     3.2786     0.0000
+16                  0.7396              0.9418             0                1                   0            0.0            0.2021               0.0000     0.9418         0.0         0.0     3.4605     0.0000
+17                  0.9470              0.8043             0                0                   0            0.0            0.0000               0.0000     0.8043         0.0         0.0     3.4605     0.1427
+18                  0.9375              0.0000             0                0                   1            0.0            0.0000               0.9375     0.0000         0.0         0.0     2.4189     0.0000
+19                  0.7603              0.0000             0                0                   0            0.0            0.0000               0.0000     0.0000         0.0         0.0     2.4189     0.7603
+20                  0.5903              0.0000             0                0                   0            0.0            0.0000               0.0000     0.0000         0.0         0.0     2.4189     0.5903
+21                  0.2272              0.0000             0                0                   1            0.0            0.0000               0.2272     0.0000         0.0         0.0     2.1664     0.0000
+22                  0.1414              0.0000             0                0                   1            0.0            0.0000               0.1414     0.0000         0.0         0.0     2.0093     0.0000
+23                  0.0842              0.0000             0                0                   1            0.0            0.0000               0.0781     0.0000         0.0         0.0     1.9225     0.0061
+[14:43:42] [Optimizador] 📈 Gráfico generado para Julio.
+[14:43:42] [Optimizador] 💰 [4/4] Calculando Flujo de Caja...
+[14:43:42] [Optimizador] ℹ️ No hay métricas de potencia autoconsumo/punta en resultados_opt; ahorro por potencia se considera 0.
+[14:43:42] [Optimizador] 📊 Resumen Flujo de Caja
+[14:43:42] [Optimizador] -> Inversión total: 6,395,000.00
+[14:43:42] [Optimizador] -> VAN: -10,340,177.22
+[14:43:42] [Optimizador] -> TIR: nan%
+[14:43:42] [Optimizador] -> Payback simple: no recupera inversión en horizonte evaluado
+[14:43:42] [Optimizador] ✅ Proceso finalizado.
+[14:43:42] [Gestor] 🏁 Ejecución completada exitosamente en 24.72 segundos.
