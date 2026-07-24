@@ -3,7 +3,7 @@ import time
 from dataclasses import dataclass
 from stage.process import Preprocess
 from stage.clients import Cliente
-from stage.sizing import Dimensionamiento
+from stage.sizing_backup import Dimensionamiento
 from stage.optimization import Optimizador
 from utils.helpers import SimpleLogger
 
