@@ -51,6 +51,8 @@ class Dimensionamiento:
         tipo_solucion = self.cliente_data.get("Tipo de solución")
 
         # Lógica según tipo de solución
+        inv_data = self._inversiones_default()
+
         if tipo_solucion == "OffGrid":
             self.dimensionar_offgrid_interactivo()
             sens_resultado =self.calc_sensibilidad_interactivo()
@@ -71,16 +73,30 @@ class Dimensionamiento:
             self.seleccion_inversor = inversor["Inversor"]
             seleccionador_bateria = SeleccionBateria(self.eq_baterias, self.dimensionamiento_final)
             self.seleccionador_bateria = seleccionador_bateria.ejecutar()
+            inv_data = self._calcular_inversiones_minprecio_offgrid()
 
         elif tipo_solucion == "OnGrid":
             self.log("🔄 Iniciando dimensionamiento OnGrid...")
-            # self.dimensionar_ongrid()
+            # TODO: implementar dimensionamiento OnGrid
+            inv_data["criterio_inversion"] = "Pendiente_OnGrid"
         elif tipo_solucion == "Hibrido":
             self.log("🔄 Iniciando dimensionamiento Híbrido...")
-            # self.dimensionar_hibrido()
+            # TODO: implementar dimensionamiento Híbrido
+            inv_data["criterio_inversion"] = "Pendiente_Hibrido"
         else:
             self.log(f"❌ Tipo de solución no reconocido: {tipo_solucion}")
-        # Aquí iría el resto de la lógica de dimensionamiento
+            inv_data["criterio_inversion"] = "No_Definido"
+
+        # Aquí se arma la salida estándar para todos los tipos de solución.
+        inv_total = (
+            inv_data["inv_fv"]
+            + inv_data["inv_mppt"]
+            + inv_data["inv_inv_storage"]
+            + inv_data["inv_storage"]
+            + inv_data["inv_estructura"]
+            + inv_data["inv_materiales"]
+        )
+
         resultados_etapa = {
             "dimensionamiento_final": self.dimensionamiento_final,
             "mppt": self.seleccion_mppt,
@@ -89,10 +105,65 @@ class Dimensionamiento:
             "potencia_panel_total": self.dimensionamiento_final.get('Potencia_PV_Total_kW', 0) if self.dimensionamiento_final else 0,
             # Intento de extraer número de baterías si existe
             "num_baterias": getattr(self, 'seleccionador_bateria', {}).get('Num_Baterias', 0) if hasattr(self, 'seleccionador_bateria') and isinstance(self.seleccionador_bateria, dict) else 0,
-            "costo_total_inversion": 15000  # Placeholder: Sumar costos reales aquí
+            # Flujo de caja: desglose de inversión (por tipo de solución)
+            "inv_fv": inv_data["inv_fv"],
+            "inv_mppt": inv_data["inv_mppt"],
+            "inv_inv_fv": inv_data["inv_mppt"],
+            "inv_inv_storage": inv_data["inv_inv_storage"],
+            "inv_storage": inv_data["inv_storage"],
+            "inv_estructura": inv_data["inv_estructura"],
+            "inv_materiales": inv_data["inv_materiales"],
+            "costo_total_inversion": inv_total,
+            "criterio_inversion": inv_data["criterio_inversion"]
         }
         return resultados_etapa
         # return self.resultados
+
+    def _inversiones_default(self):
+        """Estructura base de inversiones para estandarizar resultados entre tipos de solución."""
+        return {
+            "inv_fv": 0.0,
+            "inv_mppt": 0.0,
+            "inv_inv_storage": 0.0,
+            "inv_storage": 0.0,
+            "inv_estructura": 0.0,
+            "inv_materiales": 0.0,
+            "criterio_inversion": "Min_Precio"
+        }
+
+    def _calcular_inversiones_minprecio_offgrid(self):
+        """
+        Consolida inversiones de OffGrid usando criterio Min Precio,
+        separadas por componente para consumo posterior en flujo de caja.
+        """
+        inv = self._inversiones_default()
+
+        # Paneles (ajustados con selección de MPPT cuando existe resumen)
+        if isinstance(self.seleccion_mppt_paneles, pd.DataFrame) and not self.seleccion_mppt_paneles.empty:
+            row_panel = self.seleccion_mppt_paneles[self.seleccion_mppt_paneles['Clave'] == 'Menor Precio']
+            if not row_panel.empty:
+                inv["inv_fv"] = float(row_panel.iloc[0]['Precio_total'])
+        elif isinstance(self.panel_criterio_minprecio, dict):
+            inv["inv_fv"] = float(self.panel_criterio_minprecio.get('Precio_total', 0.0))
+
+        # MPPT (fila Menor Precio del resumen de MPPT)
+        if isinstance(self.seleccion_mppt, pd.DataFrame) and not self.seleccion_mppt.empty:
+            row_mppt = self.seleccion_mppt[self.seleccion_mppt['Clave'] == 'Menor Precio']
+            if not row_mppt.empty:
+                inv["inv_mppt"] = float(row_mppt.iloc[0]['Precio']) * float(row_mppt.iloc[0]['# MPPT'])
+
+        # Inversor de almacenamiento (selección de menor precio)
+        if isinstance(self.seleccion_inversor, pd.DataFrame) and not self.seleccion_inversor.empty:
+            inv["inv_inv_storage"] = float(self.seleccion_inversor.iloc[0]['Precio'])
+
+        # Baterías (criterio Min Precio)
+        if isinstance(getattr(self, 'seleccionador_bateria', None), dict):
+            bat_min = self.seleccionador_bateria.get('Bateria_Min_Precio', None)
+            if bat_min is not None:
+                inv["inv_storage"] = float(bat_min.get('Precio Total', 0.0))
+
+        inv["criterio_inversion"] = "Min_Precio"
+        return inv
 
     def cargar_archivo_pgen(self, base_path=None):
         """
@@ -123,6 +194,7 @@ class Dimensionamiento:
         if archivo_cliente is None:
             raise FileNotFoundError(f"❌ No se encontró un archivo para el cliente con índice {codigo} en {base_path}")
 
+        print("------AQUI--------, Sizing: 123")
         ruta_completa = os.path.join(base_path, archivo_cliente)
         # print(f"📂 Archivo encontrado: {archivo_cliente}")
 

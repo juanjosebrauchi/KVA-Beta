@@ -1,0 +1,71 @@
+Solver command line: ['C:\\Users\\juanjose.astudillo\\AppData\\Local\\anaconda3\\Library\\bin\\glpsol.exe', '--tmlim', '200', '--mipgap', '0.01', '--write', 'C:\\Users\\JUANJO~1.AST\\AppData\\Local\\Temp\\tmpi9e1n18n.glpk.raw', '--wglp', 'C:\\Users\\JUANJO~1.AST\\AppData\\Local\\Temp\\tmp18wskzjm.glpk.glp', '--cpxlp', 'C:\\Users\\JUANJO~1.AST\\AppData\\Local\\Temp\\tmpclpo_ck8.pyomo.lp']
+
+GLPSOL--GLPK LP/MIP Solver 5.0
+Parameter(s) specified in the command line:
+ --tmlim 200 --mipgap 0.01 --write C:\Users\JUANJO~1.AST\AppData\Local\Temp\tmpi9e1n18n.glpk.raw
+ --wglp C:\Users\JUANJO~1.AST\AppData\Local\Temp\tmp18wskzjm.glpk.glp --cpxlp
+ C:\Users\JUANJO~1.AST\AppData\Local\Temp\tmpclpo_ck8.pyomo.lp
+Reading problem data from 'C:\Users\JUANJO~1.AST\AppData\Local\Temp\tmpclpo_ck8.pyomo.lp'...
+C:\Users\JUANJO~1.AST\AppData\Local\Temp\tmpclpo_ck8.pyomo.lp:18500: warning: lower bound of variable 'x1731' redefined
+C:\Users\JUANJO~1.AST\AppData\Local\Temp\tmpclpo_ck8.pyomo.lp:18500: warning: upper bound of variable 'x1731' redefined
+2604 rows, 2880 columns, 6070 non-zeros
+576 integer variables, all of which are binary
+19076 lines were read
+Writing problem data to 'C:\Users\JUANJO~1.AST\AppData\Local\Temp\tmp18wskzjm.glpk.glp'...
+17895 lines were written
+GLPK Integer Optimizer 5.0
+2604 rows, 2880 columns, 6070 non-zeros
+576 integer variables, all of which are binary
+Preprocessing...
+1440 rows, 1574 columns, 3578 non-zeros
+576 integer variables, all of which are binary
+Scaling...
+ A: min|aij| =  9.000e-01  max|aij| =  1.600e+00  ratio =  1.778e+00
+Problem data seem to be well scaled
+Constructing initial basis...
+Size of triangular part is 1440
+Solving LP relaxation...
+GLPK Simplex Optimizer 5.0
+1440 rows, 1574 columns, 3578 non-zeros
+      0: obj =   2.559869743e+07 inf =   4.963e+01 (36)
+    416: obj =   2.678606983e+07 inf =   0.000e+00 (0) 3
+*   833: obj =   4.120807734e+06 inf =   0.000e+00 (0) 2
+OPTIMAL LP SOLUTION FOUND
+Integer optimization begins...
+Long-step dual simplex will be used
++   833: mip =     not found yet >=              -inf        (1; 0)
++  1248: >>>>>   4.956496919e+06 >=   4.120807734e+06  16.9% (278; 0)
++  2742: >>>>>   4.931205009e+06 >=   4.120807734e+06  16.4% (1016; 55)
++  2991: >>>>>   4.925977646e+06 >=   4.120807734e+06  16.3% (1110; 126)
++  3236: >>>>>   4.867537775e+06 >=   4.120807734e+06  15.3% (1219; 184)
++  3462: >>>>>   4.844845521e+06 >=   4.120807734e+06  14.9% (1253; 339)
++  3671: >>>>>   4.801379955e+06 >=   4.120807734e+06  14.2% (1320; 449)
++  3869: >>>>>   4.743016001e+06 >=   4.120807734e+06  13.1% (1362; 566)
++  4040: >>>>>   4.674205967e+06 >=   4.120807734e+06  11.8% (1337; 777)
++  4193: >>>>>   4.631268165e+06 >=   4.120807734e+06  11.0% (1133; 1355)
++  4315: >>>>>   4.586982765e+06 >=   4.120807734e+06  10.2% (1015; 1762)
++  4415: >>>>>   4.562969990e+06 >=   4.120807734e+06   9.7% (977; 1928)
++  4512: >>>>>   4.540698947e+06 >=   4.120807734e+06   9.2% (961; 2086)
++  4608: >>>>>   4.532066207e+06 >=   4.120807734e+06   9.1% (956; 2201)
++  4709: >>>>>   4.502040632e+06 >=   4.120807734e+06   8.5% (981; 2265)
++  4807: >>>>>   4.475160651e+06 >=   4.120807734e+06   7.9% (968; 2400)
++  4903: >>>>>   4.447781292e+06 >=   4.120807734e+06   7.4% (937; 2565)
++  4997: >>>>>   4.404258752e+06 >=   4.120807734e+06   6.4% (859; 2861)
++  5092: >>>>>   4.388355050e+06 >=   4.120807734e+06   6.1% (800; 3075)
++  5206: >>>>>   4.366729120e+06 >=   4.120807734e+06   5.6% (801; 3200)
++  5467: >>>>>   4.363694477e+06 >=   4.120807734e+06   5.6% (851; 3370)
++  5551: >>>>>   4.333266081e+06 >=   4.120807734e+06   4.9% (873; 3424)
++  5660: >>>>>   4.285472121e+06 >=   4.120807734e+06   3.8% (809; 3662)
++  5714: >>>>>   4.261669963e+06 >=   4.120807734e+06   3.3% (684; 3990)
++  5764: >>>>>   4.245917226e+06 >=   4.120807734e+06   2.9% (638; 4130)
++  5806: >>>>>   4.203993901e+06 >=   4.120807734e+06   2.0% (617; 4223)
++  5834: >>>>>   4.188674970e+06 >=   4.120807734e+06   1.6% (456; 4575)
++  5861: >>>>>   4.173960249e+06 >=   4.120807734e+06   1.3% (407; 4737)
++  5886: >>>>>   4.139889403e+06 >=   4.120807734e+06   0.5% (348; 4896)
++  5886: mip =   4.139889403e+06 >=   4.120807734e+06   0.5% (220; 5130)
+RELATIVE MIP GAP TOLERANCE REACHED; SEARCH TERMINATED
+Time used:   10.5 secs
+Memory used: 3.9 Mb (4121770 bytes)
+Writing MIP solution to 'C:\Users\JUANJO~1.AST\AppData\Local\Temp\tmpi9e1n18n.glpk.raw'...
+5493 lines were written
+
