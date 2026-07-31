@@ -37,7 +37,6 @@ class Dimensionamiento:
 
     def ejecutar(self, path_pgen=None, indice_cliente=None):
         
-        print("\n============Aqui inicia el dimensionamiento====L40: Sizing========================")
         self.log("🔄 Iniciando dimensionamiento del cliente...")
         if indice_cliente is None:
             indice_cliente = self.indice_cliente    
@@ -51,8 +50,6 @@ class Dimensionamiento:
         tipo_solucion = self.cliente_data.get("Tipo de solución")
 
         # Lógica según tipo de solución
-        inv_data = self._inversiones_default()
-
         if tipo_solucion == "OffGrid":
             self.dimensionar_offgrid_interactivo()
             sens_resultado =self.calc_sensibilidad_interactivo()
@@ -73,30 +70,16 @@ class Dimensionamiento:
             self.seleccion_inversor = inversor["Inversor"]
             seleccionador_bateria = SeleccionBateria(self.eq_baterias, self.dimensionamiento_final)
             self.seleccionador_bateria = seleccionador_bateria.ejecutar()
-            inv_data = self._calcular_inversiones_minprecio_offgrid()
 
         elif tipo_solucion == "OnGrid":
             self.log("🔄 Iniciando dimensionamiento OnGrid...")
-            # TODO: implementar dimensionamiento OnGrid
-            inv_data["criterio_inversion"] = "Pendiente_OnGrid"
+            # self.dimensionar_ongrid()
         elif tipo_solucion == "Hibrido":
             self.log("🔄 Iniciando dimensionamiento Híbrido...")
-            # TODO: implementar dimensionamiento Híbrido
-            inv_data["criterio_inversion"] = "Pendiente_Hibrido"
+            # self.dimensionar_hibrido()
         else:
             self.log(f"❌ Tipo de solución no reconocido: {tipo_solucion}")
-            inv_data["criterio_inversion"] = "No_Definido"
-
-        # Aquí se arma la salida estándar para todos los tipos de solución.
-        inv_total = (
-            inv_data["inv_fv"]
-            + inv_data["inv_mppt"]
-            + inv_data["inv_inv_storage"]
-            + inv_data["inv_storage"]
-            + inv_data["inv_estructura"]
-            + inv_data["inv_materiales"]
-        )
-
+        # Aquí iría el resto de la lógica de dimensionamiento
         resultados_etapa = {
             "dimensionamiento_final": self.dimensionamiento_final,
             "mppt": self.seleccion_mppt,
@@ -105,65 +88,11 @@ class Dimensionamiento:
             "potencia_panel_total": self.dimensionamiento_final.get('Potencia_PV_Total_kW', 0) if self.dimensionamiento_final else 0,
             # Intento de extraer número de baterías si existe
             "num_baterias": getattr(self, 'seleccionador_bateria', {}).get('Num_Baterias', 0) if hasattr(self, 'seleccionador_bateria') and isinstance(self.seleccionador_bateria, dict) else 0,
-            # Flujo de caja: desglose de inversión (por tipo de solución)
-            "inv_fv": inv_data["inv_fv"],
-            "inv_mppt": inv_data["inv_mppt"],
-            "inv_inv_fv": inv_data["inv_mppt"],
-            "inv_inv_storage": inv_data["inv_inv_storage"],
-            "inv_storage": inv_data["inv_storage"],
-            "inv_estructura": inv_data["inv_estructura"],
-            "inv_materiales": inv_data["inv_materiales"],
-            "costo_total_inversion": inv_total,
-            "criterio_inversion": inv_data["criterio_inversion"]
+            "costo_total_inversion": 15000  # Placeholder: Sumar costos reales aquí
         }
         return resultados_etapa
         # return self.resultados
 
-    def _inversiones_default(self):
-        """Estructura base de inversiones para estandarizar resultados entre tipos de solución."""
-        return {
-            "inv_fv": 0.0,
-            "inv_mppt": 0.0,
-            "inv_inv_storage": 0.0,
-            "inv_storage": 0.0,
-            "inv_estructura": 0.0,
-            "inv_materiales": 0.0,
-            "criterio_inversion": "Min_Precio"
-        }
-
-    def _calcular_inversiones_minprecio_offgrid(self):
-        """
-        Consolida inversiones de OffGrid usando criterio Min Precio,
-        separadas por componente para consumo posterior en flujo de caja.
-        """
-        inv = self._inversiones_default()
-
-        # Paneles (ajustados con selección de MPPT cuando existe resumen)
-        if isinstance(self.seleccion_mppt_paneles, pd.DataFrame) and not self.seleccion_mppt_paneles.empty:
-            row_panel = self.seleccion_mppt_paneles[self.seleccion_mppt_paneles['Clave'] == 'Menor Precio']
-            if not row_panel.empty:
-                inv["inv_fv"] = float(row_panel.iloc[0]['Precio_total'])
-        elif isinstance(self.panel_criterio_minprecio, dict):
-            inv["inv_fv"] = float(self.panel_criterio_minprecio.get('Precio_total', 0.0))
-
-        # MPPT (fila Menor Precio del resumen de MPPT)
-        if isinstance(self.seleccion_mppt, pd.DataFrame) and not self.seleccion_mppt.empty:
-            row_mppt = self.seleccion_mppt[self.seleccion_mppt['Clave'] == 'Menor Precio']
-            if not row_mppt.empty:
-                inv["inv_mppt"] = float(row_mppt.iloc[0]['Precio']) * float(row_mppt.iloc[0]['# MPPT'])
-
-        # Inversor de almacenamiento (selección de menor precio)
-        if isinstance(self.seleccion_inversor, pd.DataFrame) and not self.seleccion_inversor.empty:
-            inv["inv_inv_storage"] = float(self.seleccion_inversor.iloc[0]['Precio'])
-
-        # Baterías (criterio Min Precio)
-        if isinstance(getattr(self, 'seleccionador_bateria', None), dict):
-            bat_min = self.seleccionador_bateria.get('Bateria_Min_Precio', None)
-            if bat_min is not None:
-                inv["inv_storage"] = float(bat_min.get('Precio Total', 0.0))
-
-        inv["criterio_inversion"] = "Min_Precio"
-        return inv
 
     def cargar_archivo_pgen(self, base_path=None):
         """
@@ -194,7 +123,6 @@ class Dimensionamiento:
         if archivo_cliente is None:
             raise FileNotFoundError(f"❌ No se encontró un archivo para el cliente con índice {codigo} en {base_path}")
 
-        print("------AQUI--------, Sizing: 123")
         ruta_completa = os.path.join(base_path, archivo_cliente)
         # print(f"📂 Archivo encontrado: {archivo_cliente}")
 
@@ -216,12 +144,12 @@ class Dimensionamiento:
         # Mostrar el resultado
         print()
         # print("============Aqui se carga el perfil====L144: Sizing========================")
-        print("📊 Perfil de generación por mes (kW):")
+        print("📊 Perfil de generación por mes:")
         # print(df_rango)
         # Calcular energía generada por mes (suma de columnas por fila)
         self.df_pgen_cliente = df_rango
         energia_pvgen_tab = self.df_pgen_cliente.sum(axis=1).tolist()
-        print("Mes    - EGen [kWh]")
+        print("Mes    - EGen [kWh/dia]")
         for i in range(12):
             print(f"{meses[i]:<6} - {energia_pvgen_tab[i]:10.2f} ")
 
@@ -307,7 +235,7 @@ class Dimensionamiento:
                 respuesta = input("\n¿Deseas modificar el paso? (Y/N): ").strip().lower()
                 if respuesta != 'y':
                     # print("✅ Continuando con el proceso usando el paso actual.")
-                    print(f"✅ Continuando con el dimensionamiento usando el incremento de potencia PV de {paso_actual:.2f} kW.")
+                    print(f"✅ En el dimensionamiento, se utilizó el incremento de potencia PV de {paso_actual:.2f} kW.")
                     break
 
                 # Ingresar nuevo valor personalizado
@@ -324,7 +252,7 @@ class Dimensionamiento:
             else:
                 # Modo no interactivo: usar valor por defecto y continuar
                 # print("✅ Continuando con el proceso usando el paso actual.")
-                print(f"✅ Continuando con el dimensionamiento usando el incremento de potencia PV de {paso_actual:.2f} kW.")
+                # print(f"✅ Continuando con el dimensionamiento usando el incremento de potencia PV de {paso_actual:.2f} kW.")
                 break
 
     def calc_sensibilidad(self, paso, pot_max=None):
@@ -338,6 +266,7 @@ class Dimensionamiento:
             pot_max = max(self.potencia_pv_mensual)
         
         print(f"📊 Incremento de potencia entre escenarios: {paso:.2f} kW")
+        print(f"📊 Potencia nominal base (Pot. PV máxima): {pot_max:.2f} kW")
 
         energia_pvgen = self.energia_generada_mensual
         energia_dem = self.energia_demandada_mensual
@@ -399,7 +328,7 @@ class Dimensionamiento:
                     print("⚠️ Respuesta no válida. Ingresa 'Y' para sí o 'N' para no.")
         else:
             # Modo no interactivo: usar valor por defecto
-            print("✅ Continuando con el proceso final del análisis - se utilizo un valor por defecto...")
+            print(" ")
         
         return resultado
     
@@ -592,6 +521,7 @@ class SeleccionPanel:
             self.precios_totales.append(total_precio)
 
         print("\n📊 Comparativa de Paneles Solares")
+        print(f"⚡ Potencia PV: {self.dimensionamiento_final['Potencia_PV']:.2f} [kW]")
         print("Potencia PV [Wp] | Cant de Paneles [-] | Precio Total [CLP]")
         print("-----------------------------------------------------------")
         for i in range(len_pv):
@@ -770,6 +700,8 @@ class SeleccionMPPT:
 
         # === Mostrar primero criterio 1 ===
         print("\n🔹 Criterio 1: Panel Menor Precio")
+        print(f"🔹 Cantidad de paneles: {self.panel_minprecio['Cantidad']}")
+        print(f"🔹 Voltaje a máxima potencia del panel: {self.panel_minprecio['Vmp']} V")
         print("DC-Link MPPT [V]  | Paneles/MPPT [-] | #MPPT [-] | Precio Total [CLP]")
         print("---------------------------------------------------------------------")
         for x in range(lenMPPT):
@@ -780,6 +712,8 @@ class SeleccionMPPT:
 
         # === Mostrar luego criterio 2 ===
         print("\n🔸 Criterio 2: Panel Precio Promedio")
+        print(f"🔹 Cantidad de paneles: {self.panel_avgprecio['Cantidad']}")
+        print(f"🔹 Voltaje a máxima potencia del panel: {self.panel_avgprecio['Vmp']} V")
         print("DC-Link MPPT [V]  | Paneles/MPPT [-] | #MPPT [-] | Precio Total [CLP]")
         print("---------------------------------------------------------------------")
         for x in range(lenMPPT):
@@ -795,7 +729,6 @@ class SeleccionMPPT:
         self.mppt_cantidad_avgprecio = MPPTC2
         self.mppt_valor_minprecio = MPPT_ValorC1
         self.mppt_valor_avgprecio = MPPT_ValorC2
-        print("----")
 
     def seleccionar(self, potencia_necesaria):
         df_mppts = self.df_mppts
@@ -1044,10 +977,11 @@ class SeleccionInversor:
         Eq_Inversores = self.eq_inversores
         Factor_Seguridad_Inv = 1.15
         Dim_P_Inv = self.dimensionamiento_final["Potencia_Inversor"]*Factor_Seguridad_Inv
-        print("---------AQUI-------L: 858, Sizing\n")
         print("🔎 Seleccionando inversor con potencia mínima requerida...")
-        print("Potencia Mínima del Inversor {:.2f} [kW]".format(Dim_P_Inv))
+        print("Potencia maxima demandada: {:.2f} [kW]".format(self.dimensionamiento_final["Potencia_Inversor"]))
         print("Con un Factor de Seguridad de: {:.2f} %".format((Factor_Seguridad_Inv-1)*100))
+        print("Potencia Mínima del Inversor {:.2f} [kW]".format(Dim_P_Inv))
+        
 
         len_inv = len(Eq_Inversores)
         Inv_EN = [0] * len_inv
@@ -1076,13 +1010,13 @@ class SeleccionInversor:
         # --- Selección de menor precio ---
         minPrecio_inv = min(Inv_Precio)
         ix_minPrecio = Inv_EN.index(minPrecio_inv)
-
-        print("El menor Precio de Inversión del Inversor es de: ${:,.0f} CLP".format(minPrecio_inv))
         print(
             "La potencia seleccionada es de: {:,.0f} [W]".format(
                 Eq_Inversores.loc[ix_minPrecio, 'Potencia nominal (W)']
             )
         )
+        print("El menor Precio de Inversión del Inversor es de: ${:,.0f} CLP".format(minPrecio_inv))
+
 
         # --- Guardar resultados ---
         Datos_Inv = {
@@ -1155,6 +1089,7 @@ class SeleccionBateria:
         print("\n🔋 Calculando número de baterías necesarias...")
         print("-------------------------------------------------")
         print("Autonomia de la bateria requerida: {:.2f} kWh".format(self.dimensionamiento_final["Autonomia_Promedio"]))
+        print("Autonomia de la bateria requerida: {:.2f} Ah".format(self.dimensionamiento_final["Autonomia_Promedio"]*1e3/48))
         print()
 
         eq_baterias = self.df_baterias
